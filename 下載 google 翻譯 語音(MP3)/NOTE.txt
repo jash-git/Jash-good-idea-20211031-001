@@ -1,0 +1,17 @@
+下載 google 翻譯 語音(MP3)
+
+https://soundoftext.com/ [陽春簡單好用]
+
+https://wideo.co/text-to-speech/ [可調整語速/和不同發音]
+
+測試內容:
+
+經商(做生意)/念研究所/結婚&生子 本來就是一條不歸路
+
+自己選的 沒有人脅迫 既然自己選 就只能自己承擔 沒人能幫你
+
+再次驗證:『謀定而後動 知止而有得』很重要
+
+<audio controls autoplay>
+  <source src="music.mp3" type="audio/mpeg">
+</audio> 
