@@ -1,0 +1,2811 @@
+define("appmsg/comment/comment_write_old.html.js",[],function(){
+return'<!-- 旧版写留言 -->\n<div id="js_cmt_mine" class="discuss_container_wrp" style="display:none;">\n  <div class="discuss_container editing access">\n    <div class="discuss_container_inner">\n      <div class="discuss_container_hd">\n        <h2 class="discuss_rich_media_title"><#=textPageTitle#></h2> <!-- 标题要转义 -->\n        <span id="log"></span>\n\n        <div id="js_comment_input_old" class="dicuss_form_area">\n          <!-- 这里放input组件 -->\n        </div>\n      </div>\n      <div class="discuss_container_bd">\n        <!-- 标题 -->\n        <div class="rich_media_extra_title_wrp weui-flex">\n          <div class="weui-flex__item">\n            <strong class="rich_media_extra_title">我的留言</strong>\n          </div>\n        </div>\n\n        <div class="discuss_list_wrp">\n          <ul class="discuss_list" id="js_my_list_old"></ul>\n        </div>\n\n        <!-- 留言加载中 -->\n        <div class="js_mycmt_loading">\n          <div class="weui-loadmore weui-loadmore_default">\n            <i class="weui-loading"></i>\n            <span class="weui-loadmore__tips">正在加载</span>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- 秒开下的底部导航条 -->\n<div class="weui-webview-nav" style="display: none;" id="js_fake_bar">\n  <button class="weui-webview-nav__btn_goback" id="js_cmt_goback">goback</button>\n  <button class="weui-webview-nav__btn_forward weui-webview-nav__btn_disabled" disabled="disabled">forward</button>\n</div>\n';
+});define("appmsg/comment/comment_write.html.js",[],function(){
+return'<# if (!deviceIsPc) { #>\n  <!-- 手机端写留言 -->\n  <div role="dialog" aria-modal="true" aria-hidden="true" id="js_cmt_write_area" class="discuss_form_write_area">\n    <div class="js_cmt_write_area_inner discuss_form_write_mod">\n      <div class="rich_media_extra_title_wrp weui-flex">\n        <div class="weui-flex__item js_title">\n          <strong class="rich_media_extra_title">写留言</strong>\n        </div>\n        <a class="js_cancel weui-wa-hotarea" href="javascript:;">取消</a>\n      </div>\n      <textarea class="discuss_form_write_input js_cmt_input" placeholder="留言精选后，将对所有人可见"></textarea>\n      <div class="js_keyboard_tool">\n        <div class="discuss_form_write_tool weui-flex">\n          <div class="weui-flex__item">\n            <span class="discuss_form_write_tips js_cmt_tips"></span>\n          </div>\n          <a class="icon_discuss_emotion js_emotion_btn weui-wa-hotarea" role="button" aria-pressed="false" href="javascript:;">表情</a>\n          <button disabled class="weui-btn weui-btn_primary weui-btn_xmini weui-btn_disabled js_cmt_submit_btn weui-wa-hotarea discuss_form_write_btn" type="button" title="<#=cmtSubmitTitle#>">留言</button>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class="weui-mask_transparent" style="display:none;"></div>\n<# } else { #>\n  <!-- pc端写留言 -->\n  <div class="comment_primary_area" id="js_comment_pc" style="display: none">\n    <div class="comment_primary_form" id="js_cmt_addbtn_pc">\n      <div class="comment_primary_form_bd comment_primary_input_multiline" id="js_cmt_panel_pc">\n        <div class="comment_primary_input_default" id="js_cmt_input_pc" style="display: none">写下你的留言</div>\n      </div>\n    </div>\n  </div>\n<# } #>\n';
+});define("appmsg/comment/comment_tpl.html.js",[],function(){
+return'<!-- 我的留言 -->\n<div class="discuss_container my_discuss_container" id="js_my_list_container" style="display: none;">\n  <div class="rich_media_extra_title_wrp weui-flex">\n    <div class="weui-flex__item">\n      <strong class="rich_media_extra_title">我的留言</strong>\n    </div>\n    <# if (!isWxWork) { #>\n      <p class="tips_global js_cmt_nofans_mine" style="display: none;">作者已设置关注后才可以留言</p>\n      <a class="js_cmt_addbtn js_wx_tap_highlight wx_tap_link weui-wa-hotarea" href="javascript:;" style="display: none;" role="button">写留言</a>\n    <# } #>\n  </div>\n\n  <div class="discuss_list_wrp">\n    <ul class="discuss_list" id="js_my_list"></ul>\n  </div>\n\n  <!-- 留言加载中 -->\n  <div class="js_mycmt_loading" role="alert">\n    <div class="weui-loadmore weui-loadmore_default">\n      <i class="weui-loading"></i>\n      <span class="weui-loadmore__tips">正在加载</span>\n    </div>\n  </div>\n\n  <!-- 默认收起，展开加weui-fold-tips_unfold -->\n  <div id="js_my_list_folder" role="button" class="weui-fold-tips weui-wa-hotarea_before" style="display: none;">展开我的留言</div> <!-- 默认隐藏，如果溢出了再显示 -->\n\n  <!-- 默认隐藏，等我的留言渲染好之后再显示 -->\n  <div id="js_my_list_footer" style="display: none;">\n    <div class="my_dicuss_list_end_tips weui-loadmore weui-loadmore_default weui-loadmore_line">\n      <span class="weui-loadmore__tips">\n        以上留言被精选后，将对所有人可见      </span>\n    </div>\n  </div>\n</div>\n\n<!-- 精选留言 -->\n<div class="discuss_container star_discuss_container" id="js_cmt_main" style="display: none;">\n  <div class="rich_media_extra_title_wrp weui-flex">\n    <div class="weui-flex__item">\n      <strong class="rich_media_extra_title">精选留言</strong>\n    </div>\n    <# if (!isWxWork) { #>\n      <p class="tips_global js_cmt_nofans_elected" style="display: none;">作者已设置关注后才可以留言</p>\n      <a class="js_cmt_addbtn js_wx_tap_highlight wx_tap_link weui-wa-hotarea" href="javascript:;" style="display: none;" role="button">写留言</a>\n    <# } #>\n  </div>\n  <div class="discuss_list_wrp">\n    <ul class="discuss_list" id="js_cmt_list"></ul>\n  </div>\n</div>\n\n<# if (!isWxWork) { #>\n  <div class="discuss_container discuss_data_empty js_cmt_nofans_single" style="display: none;">\n    <div class="rich_media_extra_title_wrp tc">\n      <div class="tips_global js_cmt_nofans_single_inner" style="display: none;">作者已设置关注后才可以留言</div>\n      <a class="js_cmt_addbtn js_wx_tap_highlight wx_tap_link weui-wa-hotarea" style="display: none;" href="javascript:;" role="button">写留言</a>\n    </div>\n  </div>\n<# } #>\n\n<div id="js_cmt_loading" role="alert">\n  <div class="weui-loadmore weui-loadmore_default">\n    <i class="weui-loading"></i>\n    <span class="weui-loadmore__tips">正在加载</span>\n  </div>\n</div>\n\n<div role="option" id="js_cmt_statement" style="display: none;">\n  <div class="weui-loadmore weui-loadmore_default weui-loadmore_line weui-loadmore_dot">\n    <div class="weui-hidden_abs">已无更多数据</div>\n    <span class="weui-loadmore__tips"></span>\n  </div>\n</div>\n\n<!-- warning toast -->\n<div role="alert" class="discuss_warn_toast weui-toast__wrp" id="js_warning_toast" style="display: none;">\n  <div class="weui-mask_transparent"></div>\n  <div class="weui-toast weui-toast_text-more">\n    <i class="weui-icon-warn weui-icon_toast"></i>\n    <p class="weui-toast__content js_content"></p>\n  </div>\n</div>\n';
+});define("biz_wap/utils/fakehash.js",["biz_common/dom/event.js"],function(t){
+"use strict";
+function s(t){
+t=t||location.hash.substr(1);
+var s,o,e,i,r=!1,c=[];
+for(s=0;s<h.length;s++)o=h[s],e=o[0],i=o[1],e!==a?("string"==typeof e&&e===t||e instanceof RegExp&&e.test(t))&&(i(n),
+r=!0):c.push(i);
+if(!r)for(s=0;s<c.length;s++)c[s](n,t);
+n=t;
+}
+var o=t("biz_common/dom/event.js"),h=[],a="__default_hash__",n=location.hash.substr(1);
+return o.on(window,"popstate",function(t){
+var o=a;
+t.state&&t.state.hash&&(o=t.state.hash),s(o);
+}),o.on(window,"hashchange",s),o.on(window,"load",function(){
+history.state&&history.state.hash&&s(history.state.hash);
+}),{
+val:function(){
+return history.state&&history.state.hash||location.hash.substr(1);
+},
+push:function(t){
+history.pushState?(history.pushState({
+hash:t
+},document.title,location.href),s(t)):location.hash=t;
+},
+replace:function(t){
+history.replaceState?(history.replaceState({
+hash:t
+},document.title,location.href),s(t)):this.push(t);
+},
+on:function(t,s){
+"function"==typeof t&&(s=t,t=a),h.push([t,s]);
+}
+};
+});define("appmsg/comment_report.js",["biz_wap/utils/ajax.js","biz_common/dom/event.js","biz_wap/utils/storage.js","common/utils.js","biz_common/dom/offset.js"],function(e){
+"use strict";
+function t(){
+if(!n&&(n=!0,setTimeout(function(){
+n=!1;
+},20),o||(o=document.getElementById("js_cmt_area")))){
+var e=c.getInnerHeight(),t=window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop,i=o.querySelectorAll(".js_comment_item");
+if(m=p.getOffset(o).offsetTop,i.length)for(var s=0;s<i.length&&m+i[s].offsetTop<t+e;s++)1!=i[s].getAttribute("data-hasreport")&&(i[s].setAttribute("data-hasreport",1),
+_.data.push({
+content_id:i[s].dataset.content_id,
+is_elected_comment:1,
+is_friend_comment:1*i[s].dataset.friend,
+scene:1
+}));
+d.set("comment_expose",_,Date.now()+6048e5);
+}
+}
+var o,m,n,i=e("biz_wap/utils/ajax.js"),s=e("biz_common/dom/event.js"),a=e("biz_wap/utils/storage.js"),c=e("common/utils.js"),d=new a("comment_expose"),p=e("biz_common/dom/offset.js"),_={
+data:[],
+appmsgid:"",
+comment_id:"",
+idx:"",
+item_show_type:0,
+biz:""
+},r=function(e){
+e&&e.data&&e.data.length&&(u(e),d.remove("comment_expose"));
+},u=function(e){
+i({
+type:"post",
+url:"/mp/appmsg_comment?action=exposurecomment",
+data:{
+comment_id:e.comment_id,
+appmsgid:e.appmsgid,
+idx:e.idx,
+item_show_type:e.item_show_type,
+__biz:e.biz,
+data:JSON.stringify(e.data)
+},
+async:!1,
+timeout:2e3
+});
+};
+s.on(window,"scroll",t),s.on(window,"unload",function(){
+r(_);
+}),s.on(window,"load",function(){
+var e=d.getData("comment_expose");
+e&&e.comment_expose&&e.comment_expose.val&&e.comment_expose.val.appmsgid&&r(e.comment_expose.val),
+t();
+});
+var f=function(e){
+_.comment_id=e.comment_id,_.appmsgid=e.appmsgid,_.idx=e.idx,_.item_show_type=e.item_show_type||0,
+_.biz=e.biz,setTimeout(function(){
+t();
+});
+};
+return f;
+});define("appmsg/retry_ajax.js",["biz_wap/utils/ajax.js","biz_wap/jsapi/core.js"],function(require,exports,module,alert){
+"use strict";
+function Retry_ajax(e){
+checkAjaxDo(e),e&&(e.success=function(a){
+dealWithSucceed(a,e);
+},e.error=function(){
+dealWithFailed(e);
+}),ajax(e);
+}
+function checkAjaxDo(e){
+var a=isContainExceptLike(e,failedQueue),i=isContainAjax(e,failedQueue);
+-1===i&&a>-1&&failedQueue.splice(a,1);
+}
+function isContainExceptLike(e,a){
+var i=-1;
+for(var r in a){
+var t=a[r];
+if(e.url||-1!=e.url.indexOf("&like=")||-1!=t.url.indexOf("&like=")){
+if(!(e.url.indexOf("&like=")>-1&&t.url.indexOf("&like=")>-1))continue;
+if(removeLikeParam(e.url)!==removeLikeParam(t.url))continue;
+}else if(!t.url||t.url!==e.url)continue;
+if(e.data&&t.data){
+var u=e.data,n=t.data;
+if(!isEqualExceptLike(u,n))continue;
+}
+i=r;
+break;
+}
+return i;
+}
+function isContainAjax(e,a){
+var i=-1;
+for(var r in a){
+var t=a[r];
+if(e.url&&t.url&&e.url==t.url){
+if(e.data&&t.data){
+var u=e.data,n=t.data;
+if(!isEqual(u,n))continue;
+}
+i=r;
+break;
+}
+}
+return i;
+}
+function removeLikeParam(e){
+var a=e.indexOf("&like="),i=e.substring(0,a)+e.substring(a+7);
+return i;
+}
+function isEqualExceptLike(e,a){
+var i=Object.getOwnPropertyNames(e),r=Object.getOwnPropertyNames(a);
+if(i.length!=r.length)return!1;
+for(var t=0;t<i.length;t++){
+var u=i[t];
+if("like"!==u&&e[u]!==a[u])return!1;
+}
+return!0;
+}
+function isEqual(e,a){
+var i=Object.getOwnPropertyNames(e),r=Object.getOwnPropertyNames(a);
+if(i.length!=r.length)return!1;
+for(var t=0;t<i.length;t++){
+var u=i[t];
+if(e[u]!==a[u])return!1;
+}
+return!0;
+}
+function dealWithSucceed(res,obj){
+try{
+var data=eval("("+res+")");
+}catch(e){
+var data=!1;
+}
+if(data&&data.base_resp&&0===data.base_resp.ret){
+var findIndex=isContainExceptLike(obj,failedQueue);
+findIndex>-1&&failedQueue.splice(findIndex,1);
+}else dealWithFailed(obj);
+}
+function dealWithFailed(e){
+var a=isContainExceptLike(e,failedQueue);
+if(-1===a){
+if(e.failedTimes=1,failedQueue.length>=MAX_QUEUE_LEN)return;
+failedQueue.push(e);
+}else{
+var i=isContainAjax(e,failedQueue);
+if(i>-1){
+if(failedQueue[a].failedTimes++,e.failedTimes=failedQueue[a].failedTimes,e.failedTimes>MAX_FAILED_TIMES)return void failedQueue.splice(i,1);
+}else failedQueue.splice(i,1),e.failedTimes=1,failedQueue.push(e);
+}
+Retry_ajax(e);
+}
+var ajax=require("biz_wap/utils/ajax.js"),JSAPI=require("biz_wap/jsapi/core.js"),failedQueue=[],MAX_FAILED_TIMES=2,MAX_QUEUE_LEN=20;
+return Retry_ajax;
+});define("complain/tips.js",["biz_common/utils/string/html.js","biz_common/dom/event.js"],function(t){
+"use strict";
+t("biz_common/utils/string/html.js");
+var i=t("biz_common/dom/event.js"),o={
+tipsTimeoutId:null,
+tipsDom:document.getElementById("tips")
+},s={
+showErrTips:function(t,i){
+var s=i||o.tipsDom;
+return t===!1?void(s.style.display="none"):(this.resetTips(),s.innerHTML=t.htmlEncode(),
+s.style.display="block",clearTimeout(o.tipsTimeoutId),void(o.tipsTimeoutId=setTimeout(function(){
+s.style.display="none";
+},4e3)));
+},
+resetTips:function(t){
+setTimeout(function(){
+var i=t||o.tipsDom;
+i&&(i.style.top=document.body.scrollTop+"px");
+},0);
+}
+};
+return i.on(window,"scroll",function(){
+s.resetTips();
+}),s;
+});define("pages/loadscript.js",[],function(){
+"use strict";
+function e(t){
+e.counter||(e.counter=1);
+var o="number"!=typeof t.retry?1:t.retry,n=t.win||window,r=n.document,a=r.createElement("script"),d=t.type||"JSONP",i=r.head||r.getElementsByTagName("head")[0]||r.documentElement,l=t.callbackName,u="uninitialized",c="undefined"==typeof t.successCode?200:t.successCode,s="undefined"==typeof t.timeoutCode?500:t.timeoutCode,f="undefined"==typeof t.stateErrorCode?400:t.stateErrorCode,m="undefined"==typeof t.scriptErrorCode?400:t.scriptErrorCode,p=!1,y=null;
+"JSONP"!=d&&"JS"!=d&&(d="JSONP");
+var C="";
+C="JSONP"==d?t.url+"&t="+Math.random():t.url;
+var h=function(e){
+a&&!p&&(p=!0,y&&(clearTimeout(y),y=null),a.onload=a.onreadystatechange=a.onerror=null,
+i&&a.parentNode&&i.removeChild(a),a=null,l&&-1==l.indexOf(".")&&(window[l]=null),
+"JS"==d&&e==c&&"loaded"==u&&"function"==typeof t.callback?t.callback():e!=c&&"loaded"!=u&&"function"==typeof t.onerror&&t.onerror(e));
+};
+if(l&&"function"==typeof t.callback&&"JSONP"==d){
+var w=l;
+-1==l.indexOf(".")&&(l=window[l]?l+e.counter++:l,window[l]=function(){
+u="loaded",t.callback.apply(null,arguments);
+}),C=C.replace("="+w,"="+l);
+}
+a.onload=a.onreadystatechange=function(){
+var e=navigator.userAgent.toLowerCase();
+(-1!=e.indexOf("opera")||-1==e.indexOf("msie")||/loaded|complete/i.test(this.readyState))&&("JS"==d&&(u="loaded"),
+h("loaded"==u?c:f));
+},a.onerror=function(){
+return o>0?(t.retry=o-1,y&&(clearTimeout(y),y=null),void e(t)):void h(m);
+},t.timeout&&(y=setTimeout(function(){
+h(s);
+},parseInt(t.timeout,10))),u="loading",a.charset="utf-8",setTimeout(function(){
+a.src=C;
+try{
+i.insertBefore(a,i.lastChild);
+}catch(e){}
+},0);
+}
+return e;
+});define("biz_wap/utils/ajax_load_js.js",["biz_wap/utils/ajax.js","biz_wap/utils/localstorage.js"],function(e){
+"use strict";
+function n(e){
+var n=d(e.url,e.version),o=function(){},i=function(){};
+if("function"==typeof e.onSuccess&&(o=e.onSuccess),"function"==typeof e.onError&&(i=e.onError),
+c(e.win,n))return void o({
+code:1,
+queueIndex:0
+});
+if(e.useCache){
+var a=u(e.url,e.version);
+if(a&&t({
+win:e.win,
+funcStr:a,
+useCache:!1,
+url:e.url,
+version:e.version
+}),c(e.win,n))return void o({
+code:2,
+queueIndex:0
+});
+}
+if(S.callbackQueue.push({
+options:e,
+onSuccess:o,
+onError:i
+}),"undefined"==typeof S.jsLoadState[n]&&(S.jsLoadState[n]=-1),-1==S.jsLoadState[n]){
+var s=e.url;
+s+=-1==s.indexOf("?")?"?"+S.customerParam+"="+e.version:"&"+S.customerParam+"="+e.version,
+r({
+originUrl:e.url,
+version:e.version,
+url:s,
+key:n
+});
+}
+}
+function r(e){
+S.jsLoadState[e.key]=1,w({
+url:e.url,
+notJoinUrl:!0,
+timeout:1e4,
+type:"POST",
+dataType:"text",
+noXRequestedWidthHeader:!0,
+success:function(n){
+if(1==S.jsLoadState[e.key]){
+S.jsLoadState[e.key]=-1;
+var r=!0;
+r=n?t({
+win:null,
+funcStr:n,
+useCache:!0,
+url:e.originUrl,
+version:e.version
+}):!1,o(r?{
+code:3,
+type:"suc",
+funcStr:n
+}:{
+code:51,
+type:"err"
+});
+}
+},
+error:function(){
+1==S.jsLoadState[e.key]&&(S.jsLoadState[e.key]=-1,o({
+code:52,
+type:"err"
+}));
+},
+complete:function(){
+1==S.jsLoadState[e.key]&&(S.jsLoadState[e.key]=-1,o({
+code:53,
+type:"err"
+}));
+}
+});
+}
+function t(e){
+var n=e.win||window,r=!0;
+try{
+n.eval(e.funcStr),r=!0;
+}catch(t){
+r=!1;
+}
+return r?(s({
+url:e.url,
+version:e.version,
+win:n
+}),e.useCache&&a(e.url,e.version,e.funcStr),!0):(l({
+url:e.url,
+version:e.version,
+win:n
+}),i(e.url),!1);
+}
+function o(e){
+for(var n=0,r=S.callbackQueue.length;r>n;n++){
+var o=S.callbackQueue[n],u=o.options,i=u.win,a=d(u.url,u.version);
+"suc"==e.type?(e.funcStr&&!c(i,a)&&t({
+win:i,
+funcStr:e.funcStr,
+useCache:!1,
+url:u.url,
+version:u.version
+}),o.onSuccess({
+code:e.code,
+queueIndex:n
+})):o.onError({
+code:e.code,
+queueIndex:n
+});
+}
+S.callbackQueue=[];
+}
+function u(e,n){
+var r=f(e),t=y.get(r);
+if(!t)return null;
+var o;
+try{
+o=JSON.parse(t);
+}catch(u){}
+if(o){
+var a=+new Date,c=1*o.time;
+return a-c>S.lsTimeout||o.version!=n||!o.func?(i(e),null):o.func;
+}
+}
+function i(e){
+var n=f(e);
+y.remove(n);
+}
+function a(e,n,r){
+var t={
+version:n,
+func:r,
+time:+new Date
+},o=f(e);
+try{
+y.set(o,JSON.stringify(t));
+}catch(u){}
+}
+function c(e,n){
+return e=e||window,e[S.winCacheKey]&&e[S.winCacheKey][n]&&e[S.winCacheKey][n].state===!0?!0:!1;
+}
+function s(e){
+var n=d(e.url,e.version),r=e.win||window;
+r[S.winCacheKey]||(r[S.winCacheKey]={}),r[S.winCacheKey][n]||(r[S.winCacheKey][n]={}),
+r[S.winCacheKey][n].state=!0;
+}
+function l(e){
+var n=d(e.url,e.version),r=e.win||window;
+if(r[S.winCacheKey]&&r[S.winCacheKey][n])try{
+delete r[S.winCacheKey][n];
+}catch(t){}
+}
+function f(e){
+return encodeURIComponent(e);
+}
+function d(e,n){
+return encodeURIComponent(e)+"_"+n||"";
+}
+function v(e){
+l(e),i(e.url);
+}
+var w=e("biz_wap/utils/ajax.js"),y=e("biz_wap/utils/localstorage.js"),S={
+jsLoadState:{},
+winCacheKey:"__loadExternalJsStates__",
+lsTimeout:1728e5,
+customerParam:"wxv",
+callbackQueue:[]
+};
+return{
+ClearCache:v,
+Load:n
+};
+});function _typeof(e){
+return e&&"undefined"!=typeof Symbol&&e.constructor===Symbol?"symbol":typeof e;
+}
+var _extends=Object.assign||function(e){
+for(var t=1;t<arguments.length;t++){
+var n=arguments[t];
+for(var a in n)Object.prototype.hasOwnProperty.call(n,a)&&(e[a]=n[a]);
+}
+return e;
+};
+define("appmsg/reward_entry.js",["biz_wap/ui/weui.js","biz_common/dom/event.js","biz_wap/utils/ajax.js","biz_wap/jsapi/core.js","biz_wap/utils/mmversion.js","appmsg/appmsgext.js","appmsg/open_url_with_webview.js","common/utils.js","biz_wap/utils/device.js","appmsg/loading.js","common/comm_report.js","appmsg/pay_read/pay_read_utils.js","biz_wap/utils/jsmonitor_report.js","appmsg/rec_report_key.js","appmsg/like_profile.js","appmsg/related_article.js"],function(e,t,n,a){
+"use strict";
+function r(e){
+e&&(e.style.display="block");
+}
+function i(e){
+e&&(e.style.display="none");
+}
+function d(e){
+v.getData({
+biz:biz,
+appmsg_type:appmsg_type,
+mid:mid,
+sn:sn,
+idx:idx,
+pass_ticket:window.pass_ticket,
+scene:R.scene,
+title:R.title,
+ct:ct,
+devicetype:R.devicetype,
+version:R.version,
+is_need_reward:R.is_need_reward,
+reward_uin_count:R.is_need_reward?3*_:0,
+send_time:R.send_time||"",
+item_show_type:window.item_show_type||"",
+rtId:R.appmsgextRtId,
+rtKey:R.appmsgextRtKey,
+is_pay_subscribe:window.isPaySubscribe,
+pay_subscribe_uin_count:window.isPaySubscribe?3*j.getCountPerLine():0,
+onSuccess:function(t){
+t&&(e||(H.rewardLink&&m.off(H.rewardLink,"click",U),H.authorAvatarLink&&m.off(H.authorAvatarLink,"click",X),
+D=[],s({
+reward_total:t.reward_total_count,
+reward_head_imgs:t.reward_head_imgs||[],
+can_reward:t.can_reward,
+timestamp:t.timestamp,
+reward_author_head:t.reward_author_head,
+rewardsn:t.rewardsn,
+can_whisper:t.can_whisper
+})),t.appmsgact&&t.appmsgact.reward_before&&(z.renderLikeProfile(["reward"]),S&&S.render&&S.render("reward")),
+console.log("reloadRewardData:",t,e),j.init(t.pay_subscribe_info,{
+rewardTotal:t.reward_total_count,
+rewardTotalCut:t.is_reward_total_count_cut
+},!0));
+},
+onError:function(){}
+});
+}
+function o(e,t,n){
+if("link"===n){
+var r="#wechat_redirect";
+e=e.replace(r,"&__tc=1"+r);
+}
+var i=function(){
+Y.src=t+"&qrcode_timestamp="+1*new Date+"#wechat_redirect";
+},d=null;
+return function(t){
+if(t.preventDefault(),"link"===n&&R.is_teenager)return weui.alert("青少年模式下不可赞赏"),
+void T.setSum(232209,0,1);
+if("0"==R.user_can_reward)return void a("你已成为该公众号的黑名单用户，暂时无法赞赏。");
+if(B(L.kReward),R.isWindowsWechat){
+var r=function(){
+var e="js_author_reward_qrcode",t="reward_pop_show",n=document.getElementById(e);
+if(n.classList.contains(t))return{
+v:void 0
+};
+i(),d=setInterval(i,12e4),n.classList[H.rewardLink.getBoundingClientRect().top<222?"add":"remove"]("reward_pop_bottom"),
+n.classList.add(t);
+var a=function r(a){
+if(n.classList.contains(t)){
+for(var i=a.target;null!==i&&i.id!==e;)i=i.parentNode;
+(null===i||i.id!==e)&&(n.classList.remove(t),clearInterval(d),d=null,m.off(window,"click",r));
+}
+};
+setTimeout(function(){
+m.on(window,"click",a);
+},1);
+}();
+if("object"===("undefined"==typeof r?"undefined":_typeof(r)))return r.v;
+}else"avatar"===n&&window.__addIdKeyReport?window.__addIdKeyReport(R.likeHeadId,R.likeHeadKey):window.__addIdKeyReport&&window.__addIdKeyReport(R.likeBtnId,R.likeBtnKey),
+f.invoke("openUrlWithExtraWebview",{
+url:e,
+openType:1
+},function(t){
+t.err_msg.indexOf(":ok")>-1||(location.href=e);
+});
+};
+}
+function s(e){
+var t=window.innerWidth||document.documentElement.innerWidth,n=(Math.ceil((b.getInnerHeight()-188)/42)+1)*Math.floor((t-15)/42);
+u="http://mp.weixin.qq.com/mp/reward?act=getrewardheads&__biz="+biz+"&appmsgid="+mid+"&idx="+idx+"&sn="+sn+"&offset=0&count="+n+"&source=1#wechat_redirect";
+var a="#wechat_redirect",s="";
+s="https://mp.weixin.qq.com/mp/author?action=show&__biz="+biz+"&appmsgid="+mid+"&timestamp="+e.timestamp+"&author_id="+R.author_id+"&idx="+idx+"&scene="+R.authorPageScene+"&rscene="+R.authorPageRscene+"&from_scene="+window.source+"&from_subscene="+window.subscene+"&from_enterid="+window.enterid+"&from_sessionid="+window.sessionid+"&is_fans="+e.isFans,
+e.rewardsn&&(s+="&rewardsn="+e.rewardsn),s+=a,-1==navigator.userAgent.indexOf("Android")||R.author_id||(s="https://mp.weixin.qq.com/bizmall/reward?act=showpage&__biz="+biz+"&appmsgid="+mid+"&idx="+idx+"&sn="+sn+"&timestamp="+e.timestamp+"&showwxpaytitle=1&rewardsn="+e.rewardsn+a);
+var p=H.rewardLink,v=H.authorAvatarLink;
+if(!Q&&b.listenStateChange({
+cb:function(e){
+if("onResume"==e.state_change||"onResume"==e.state)if(p){
+var t=(new Date).valueOf();
+if(-1!=navigator.userAgent.indexOf("Android")&&localStorage.getItem("lastOnresumeTime")&&t-parseInt(localStorage.getItem("lastOnresumeTime"))<=M)return;
+localStorage.setItem("lastOnresumeTime",t),g.isAndroid&&!R.author_id&&f.invoke("setNavigationBarColor",{
+actionCode:"1"
+}),d();
+}else d(!0);
+}
+}),Q=!0,p){
+var x="/mp/authorreward?action=getqrcode&author_id="+R.author_id+"&rewardsn="+e.rewardsn+"&timestamp="+e.timestamp+"&__biz="+biz+"&appmsgid="+mid+"&idx="+idx+"&size=160";
+if(U=o(s,x,"link"),X=o(s,x,"avatar"),m.on(p,"click",U),R.author_id&&1==e.can_reward&&v&&m.on(v,"click",X),
+1==e.can_reward&&R.author_id&&H.reward){
+r(document.getElementById("js_reward_author")),r(H.authorAvatarLink),H.rewardAuthorHead&&H.rewardAuthorHead.setAttribute("src",e.reward_author_head),
+H.reward.classList.add("reward_area_primary");
+var k=H.rewardLinkText;
+k&&(k.innerText="喜欢作者",Math.random()<.05?k.innerText="稀罕作者":Math.random()>.05&&Math.random()<.1&&(k.innerText="钟意作者")),
+H.rewardTotalText&&(H.rewardTotalText.innerText="人喜欢"),R.isWindowsWechat&&H.reward.classList.add("reward_area_win"),
+!b.isNativePage()&&e.can_whisper?G():$();
+}
+}
+A=e.reward_head_imgs;
+var I=c();
+H.reward&&(R.author_id||g.isAndroid)&&1==e.can_reward?(r(H.reward),m.on(window,"load",function(){
+l&&(m.off(window,"scroll",l),m.on(window,"scroll",l));
+})):i(H.reward);
+var j=document.getElementById("js_reward_inner");
+!window.isPaySubscribe&&j&&I>0&&r(j);
+var T=[].concat(A),E=document.getElementById("js_reward_total");
+if(W=16*_,D=[].concat(A),E)if(E.innerText=e.reward_total,R.isWindowsWechat){
+var L=E.parentNode;
+L.dataset.hasEvent||!function(){
+var t=document.getElementById("js_reward_pagination"),n=t.getElementsByClassName("js_reward_pagination_curpage")[0],a=Math.ceil(e.reward_total/W),d=1,o=!0,s=document.getElementById("js_reward_list"),c=function(t,n){
+for(var r=(t-1)*W,i=o?3*_:0,d=document.createDocumentFragment(),c=r+i,l=t===a?e.reward_total:t*W;l>c;c++)w(d,n?window.defaultAvatarUrl:D[c]);
+return!o&&(s.innerHTML=""),s.appendChild(d),o=!1,n?function(){
+for(var e=s.getElementsByClassName("reward_user_avatar"),t=i,n=e.length;n>t;t++)e[t].firstElementChild.src=D[r+t];
+}:!1;
+};
+n.innerHTML=d,t.getElementsByClassName("js_reward_pagination_totalpage")[0].innerHTML=a;
+var l="/mp/reward?act=getrewardheads&__biz="+biz+"&appmsgid="+mid+"&idx="+idx+"&sn="+sn+"&count="+W,p=null,u=function(t){
+var n=D.length;
+e.reward_total>n&&t*W>n?(p=null,p=c(t,!0),h({
+url:l+"&offset="+(t-1)*W+"#wechat_redirect",
+type:"GET",
+success:function(e){
+try{
+e=JSON.parse(e),e.reward_heads=JSON.parse(e.reward_heads).reward_heads;
+}catch(t){
+e={};
+}
+e.base_resp&&0===e.base_resp.ret&&(e.reward_heads.forEach(function(e){
+var t=T.indexOf(e);
+t>-1?T.splice(t,1):D.push(e);
+}),"function"==typeof p&&p());
+}
+})):c(t);
+};
+I<e.reward_total&&!function(){
+H.reward.classList.add("reward_avatar_overflow");
+for(var w=s.children[0];1!==w.nodeType;)w=reward.nextElementSibling;
+var c=getComputedStyle(w),l=w.offsetHeight+parseInt(c.marginBottom)+parseInt(c.marginTop);
+O=function(t){
+s.style.height="fold"===t?3*l+"px":a>d?l*Math.ceil(W/_)+"px":l*Math.ceil(e.reward_total%W/_)+"px";
+},O("fold"),m.on(L,"click",function(){
+H.reward.classList.contains("reward_avatar_unfold")?(H.reward.classList.remove("reward_avatar_unfold"),
+a>1&&i(t),O("fold")):(1===d&&o&&u(d),H.reward.classList.add("reward_avatar_unfold"),
+a>1&&r(t),O("unfold"));
+}),a>1&&m.on(t,"click",function(e){
+var t=e.target;
+if(t.classList.contains("js_reward_pagination_prev")){
+if(d--,n.innerHTML=d,u(d),1===d&&(t.disabled=!0),d===a-1){
+for(;t&&!t.classList.contains("js_reward_pagination_next");)t=t.nextElementSibling;
+t&&(t.disabled=!1),O("unfold");
+}
+}else if(t.classList.contains("js_reward_pagination_next")&&(d++,n.innerHTML=d,u(d),
+d===a&&(t.disabled=!0,O("unfold")),2===d)){
+for(;t&&!t.classList.contains("js_reward_pagination_prev");)t=t.previousElementSibling;
+t&&(t.disabled=!1);
+}
+});
+}(),L.dataset.hasEvent=1;
+}();
+}else E.setAttribute("data-href",u),E.getAttribute("data-hasevent")||(m.on(E,"click",function(e){
+var t=E.getAttribute("data-href");
+y(t,{
+sample:1,
+reject:function(){
+location.href=t;
+}
+}),e.preventDefault();
+}),E.setAttribute("data-hasevent",1));
+}
+function w(e,t){
+var n=document.createElement("span");
+n.className="reward_user_avatar";
+var a=new Image;
+return a.onload=function(){
+window.logs&&window.logs.reward_heads_total++,a.onload=a.onerror=null;
+},a.onerror=function(){
+window.logs&&window.logs.reward_heads_total++,window.logs&&window.logs.reward_heads_fail++,
+a.onload=a.onerror=null;
+},a.src=t,n.appendChild(a),e.appendChild(n),n;
+}
+function c(e){
+var t=D.length?D:A;
+if(t.length){
+var n=document.getElementById("js_reward_list"),a=0,r=document.createDocumentFragment();
+if(n){
+var i=H.reward.classList.contains("reward_avatar_unfold");
+if("function"==typeof O&&O(i?"unfold":"fold"),!e){
+for(var d=0,o=t.length;o>d&&(a++,w(r,t[d]),i||a!==3*_)&&a!==(W||16*_);++d);
+a>_&&(n.className+=" tl"),n.innerHTML="",n.appendChild(r);
+}
+}
+return a;
+}
+}
+function l(){
+if(H.reward){
+var e=window.pageYOffset||document.documentElement.scrollTop;
+if(e+b.getInnerHeight()>H.reward.offsetTop){
+var t="__biz="+biz+"&appmsgid="+mid+"&idx="+idx+"&item_show_type="+item_show_type;
+window.cgiData&&window.cgiData.vid&&(t+="&vid="+cgiData.vid),h({
+type:"GET",
+url:"/bizmall/reward?act=report&"+t,
+async:!0
+}),m.off(window,"scroll",l),l=null;
+}
+}
+}
+function p(e){
+"undefined"!=typeof e.scene&&(R.scene=e.scene),"undefined"!=typeof e.is_need_reward&&(R.is_need_reward=e.is_need_reward),
+"undefined"!=typeof e.title&&(R.title=e.title),"undefined"!=typeof e.author_id&&(R.author_id=e.author_id),
+"undefined"!=typeof e.user_can_reward&&(R.user_can_reward=e.user_can_reward),"undefined"!=typeof e.appmsgextRtId&&(R.appmsgextRtId=e.appmsgextRtId),
+"undefined"!=typeof e.appmsgextRtKey&&(R.appmsgextRtKey=e.appmsgextRtKey),"undefined"!=typeof e.likeHeadId&&(R.likeHeadId=e.likeHeadId),
+"undefined"!=typeof e.likeHeadKey&&(R.likeHeadKey=e.likeHeadKey),"undefined"!=typeof e.likeBtnId&&(R.likeBtnId=e.likeBtnId),
+"undefined"!=typeof e.likeBtnKey&&(R.likeBtnKey=e.likeBtnKey),"undefined"!=typeof e.authorPageScene&&(R.authorPageScene=e.authorPageScene),
+"undefined"!=typeof e.authorPageRscene&&(R.authorPageRscene=e.authorPageRscene),
+"undefined"!=typeof e.devicetype&&(R.devicetype=e.devicetype),"undefined"!=typeof e.version&&(R.version=e.version),
+"undefined"!=typeof e.send_time&&(R.send_time=e.send_time);
+}
+e("biz_wap/ui/weui.js");
+var _,u,m=e("biz_common/dom/event.js"),h=e("biz_wap/utils/ajax.js"),f=e("biz_wap/jsapi/core.js"),g=e("biz_wap/utils/mmversion.js"),v=e("appmsg/appmsgext.js"),y=e("appmsg/open_url_with_webview.js"),b=e("common/utils.js"),x=e("biz_wap/utils/device.js"),k=e("appmsg/loading.js"),I=e("common/comm_report.js"),j=e("appmsg/pay_read/pay_read_utils.js"),T=e("biz_wap/utils/jsmonitor_report.js"),E=e("appmsg/rec_report_key.js"),L=E.RecActionType,B=E.reportRecAction,z=e("appmsg/like_profile.js"),S=e("appmsg/related_article.js"),R={
+scene:window.source||"",
+is_need_reward:!1,
+is_teenager:window.is_teenager,
+title:window.msg_title||"",
+author_id:window.author_id||"",
+user_can_reward:!0,
+appmsgextRtId:"",
+appmsgextRtKey:"",
+likeHeadId:"110809",
+likeHeadKey:"2",
+likeBtnId:"110809",
+likeBtnKey:"3",
+authorPageScene:"142",
+authorPageRscene:"128",
+devicetype:window.devicetype||"",
+version:window.version||"",
+send_time:window.send_time||"",
+isWindowsWechat:-1!==window.navigator.userAgent.indexOf("WindowsWechat"),
+whisperMaxLen:40,
+focusTag:!1,
+doubleInputChar:["“”","‘’","（）","《》","〈〉","「」","『』","〔〕","【】","［］","[]","｛｝","{}","()","<>"],
+sendLock:!1
+},H={
+reward:document.getElementById("js_reward_area"),
+rewardLink:document.getElementById("js_reward_link"),
+authorAvatarLink:document.getElementById("js_reward_avatar"),
+rewardAuthorHead:document.getElementById("js_reward_author_head"),
+rewardLinkText:document.getElementById("js_reward_link_text"),
+rewardTotalText:document.getElementById("js_reward_total_text"),
+whisperWrap:document.getElementById("js_reward_whisper"),
+whisperDialogShow:document.getElementById("js_show_whisper_dialog"),
+whisperDialogHide:document.getElementById("js_hide_whisper_dialog"),
+whisperDialogMask:document.getElementById("js_whisper_dialog_mask"),
+whisperDialog:document.getElementById("js_reward_whisper_dialog"),
+whisperTextarea:document.getElementById("js_whisper_text"),
+whisperMsg:document.getElementById("js_whisper_msg"),
+whisperCnt:document.getElementById("js_whisper_current_cnt"),
+whisperSend:document.getElementById("js_whisper_send")
+},A=[],M=500,O=null,W=0,D=[],P=function(e){
+e&&window.WX_BJ_REPORT&&window.WX_BJ_REPORT.BadJs&&window.WX_BJ_REPORT.BadJs.report("force horizontal screen","biz: "+("function"==typeof window.atob?window.atob(window.biz):window.biz)+" | mid: "+window.mid+" | idx: "+window.idx+" | action: "+e,{
+mid:"mmbizwap:horizontal_screen",
+view:"wap_business"
+});
+};
+window.logs&&(window.logs.reward_heads_total=0,window.logs.reward_heads_fail=0);
+var K,C=function(e){
+var t=e.target;
+"TEXTAREA"!==t.tagName&&"BUTTON"!==t.tagName&&(e.preventDefault(),e.stopPropagation());
+},N=function(e){
+var t=e.targetTouches||[];
+if(t.length>0){
+var n=t[0]||{};
+K=n.clientY;
+}
+},q=function(e){
+var t=!1,n=e.changedTouches,a=this.scrollTop,r=this.offsetHeight,i=this.scrollHeight;
+if(n.length>0){
+var d=n[0]||{},o=d.clientY;
+t=o>K&&0>=a?!1:K>o&&a+r>=i?!1:!0,t||e.preventDefault();
+}
+},J=function(){
+document.addEventListener("touchmove",C,{
+passive:!1
+}),H.whisperTextarea.addEventListener("touchstart",N,{
+passive:!1
+}),H.whisperTextarea.addEventListener("touchmove",q,!1);
+},F=function(){
+document.removeEventListener("touchmove",C,{
+passive:!1
+}),H.whisperTextarea.removeEventListener("touchstart",N,{
+passive:!1
+}),H.whisperTextarea.removeEventListener("touchmove",q,!1);
+},U=function(){},X=function(){},Y=document.getElementById("js_author_reward_qrcode_img"),G=function(){
+return r(H.whisperWrap);
+},$=function(){
+return i(H.whisperWrap);
+},Q=!1,V=function(e){
+var t=0;
+try{
+t=1*window.atob(window.biz);
+}catch(n){}
+var a={
+BizUin:t,
+BizUinStr:window.biz||"",
+AppMsgId:window.parseInt(window.mid,10)||0,
+ItemIdx:window.parseInt(window.idx,10)||0,
+ItemShowType:window.parseInt(window.item_show_type,10)||0,
+SessionIdStr:window.sessionid||"",
+EnterId:window.parseInt(window.enterid,10)||0,
+Scene:window.parseInt(window.source,10)||0,
+SubScene:window.parseInt(window.subscene,10)||0,
+IsFans:1*e||0
+},d=function(e){
+return weui.alert(e&&e>R.whisperMaxLen?"悄悄话不可以超过字":"网络异常，请稍后重试");
+},o=function(){
+if(!H.whisperSend.disabled&&!R.sendLock){
+R.sendLock=!0,I.report(19048,_extends({
+EventType:3
+},a)),k.show("发送中");
+var e=H.whisperTextarea.value.replace(/^\s+|\s+$/g,"");
+h({
+url:"/mp/author?action=whisper",
+data:{
+__biz:window.biz||window.__biz,
+mid:window.mid||window.appmsgid,
+idx:window.idx,
+content:e,
+scene:window.source,
+subscene:window.subscene,
+enterid:window.enterid,
+sessionid:window.sessionid
+},
+type:"POST",
+success:function(t){
+try{
+t=JSON.parse(t);
+}catch(n){
+t={};
+}
+R.sendLock=!1,k.hide(),t&&t.base_resp&&0===t.base_resp.ret?(s(),$(),weui.toast("已发送",1e3)):d(e.length);
+},
+error:function(){
+R.sendLock=!1,k.hide(),d();
+}
+});
+}
+},s=function(){
+!g.isIPad&&g.isWechat&&f.invoke("handleDeviceInfo",{
+action:"setOrientation",
+orientation:0,
+lock:!1
+},function(){}),i(H.whisperDialog),H.whisperTextarea.value="",H.whisperSend.disabled=!0,
+F();
+};
+m.on(H.whisperDialogShow,"click",function(){
+var e=90===Math.abs(window.orientation);
+!g.isIPad&&g.isWechat&&f.invoke("handleDeviceInfo",{
+action:"setOrientation",
+orientation:0,
+lock:!0
+},function(t){
+t.err_msg&&-1!==t.err_msg.indexOf("ok")&&e&&P(4);
+}),I.report(19048,_extends({
+EventType:2
+},a)),r(H.whisperDialog),H.whisperTextarea.focus(),J();
+}),m.on(H.whisperDialogHide,"mousedown",s),m.on(H.whisperDialogMask,"mousedown",s),
+m.on(H.whisperTextarea,"input",function(e){
+var t=e.target.value.replace(/^\s+|\s+$/g,"").length;
+t>R.whisperMaxLen?(H.whisperSend.disabled=!0,H.whisperCnt.innerHTML=t,H.whisperMsg.style.visibility="visible"):(H.whisperSend.disabled=0===t,
+H.whisperMsg.style.visibility="hidden"),x.os.ios&&e.data&&R.doubleInputChar.indexOf(e.data)>-1&&(R.focusTag=!0);
+}),m.on(H.whisperTextarea,"click",function(e){
+if(x.os.ios&&R.focusTag){
+var t=e.target;
+t.blur(),t.focus(),R.focusTag=!1;
+}
+}),m.on(H.whisperSend,"mousedown",o);
+};
+return{
+handle:function(e,t){
+_=t,p(e),1==e.can_reward&&R.author_id&&H.reward&&V(e.isFans),s(e);
+},
+render:function(e){
+_=e,c(!0);
+},
+bindWhisperEvent:V,
+showWhisperWrap:G
+};
+});define("complain/utils/utils.js",["biz_common/tmpl.js"],function(r,t,n){
+"use strict";
+function e(r,t){
+var n=t||window.location.search,e=new RegExp("(^|&)"+r+"=([^&]*)(&|$)"),i=n.substr(n.indexOf("?")+1).match(e);
+return null!=i?i[2]:"";
+}
+function i(r,t,n){
+var e="string"==typeof t?t.split("."):t;
+if(1===e.length)return void(r[t]=n);
+var o=e.shift();
+i(r[o],e,n);
+}
+function o(){
+var r;
+return Array.from?(r=Array).from.apply(r,arguments):[].slice.call(arguments[0]);
+}
+function u(r,t,n){
+var e=r;
+"string"==typeof r&&(e=document.querySelector(r)),e.innerHTML=a.tmpl(t,n);
+}
+var a=r("biz_common/tmpl.js"),s=function(){
+return(65536*(1+Math.random())|0).toString(16).substring(1);
+},c=function(r){
+return Array.prototype.slice.call(r,0);
+};
+n.exports={
+uuid:s,
+toArray:c,
+getQuery:e,
+set:i,
+arrayfrom:o,
+renderTpl:u
+};
+});function _typeof(e){
+return e&&"undefined"!=typeof Symbol&&e.constructor===Symbol?"symbol":typeof e;
+}
+define("common/keyboard.js",["biz_wap/jsapi/core.js","biz_common/dom/event.js","biz_wap/utils/mmversion.js","pages/bottom_input_bar.js","common/utils.js"],function(e){
+"use strict";
+var t=e("biz_wap/jsapi/core.js"),n=e("biz_common/dom/event.js"),o=e("biz_wap/utils/mmversion.js"),i=e("pages/bottom_input_bar.js"),s=e("common/utils.js"),a=o.getInner(),r={
+vertical:0,
+horizontal:0
+};
+0===window.orientation||180===window.orientation?(r.vertical=s.getInnerHeight(),
+r.horizontal=screen.width-(screen.height-r.vertical)):(r.horizontal=s.getInnerHeight(),
+r.vertical=screen.width-(screen.height-r.horizontal+60));
+var c=!1,d=!1,u=!0;
+o.isIOS&&o.gtVersion("7.0.16")?(c=!0,d=!0):o.isAndroid&&(o.gtVersion("7.0.18")&&"27001634">a||a>="28000038")&&(c=!0,
+d=a>="27001700");
+var l={
+keyboard:0,
+input:0,
+cmtInput:0
+},f=[],p=!1,h=null,y=!1,m=null,b=null,g=null,w=!1,v=!1;
+c&&(d&&(h=document.createElement("div"),h.style.cssText="width: 100%; height: 100%; position: fixed; top: 0; background-color: transparent; z-index: 99999999; display: none;",
+document.body.appendChild(h),n.on(h,"touchmove",function(e){
+y&&e.preventDefault();
+})),s.listenStateChange({
+cb:function(e){
+"onDestroy"===e.state&&(h&&(h.style.display="none"),"function"==typeof b&&b(""),
+"function"==typeof g&&g(""));
+}
+}));
+var j=function(){
+return c?!0:(console.log("Not support keyboard."),!1);
+},k=function(e,t){
+w&&(t=m.$inputWrapper.height()),f.length&&f.forEach(function(n){
+"function"==typeof n&&n({
+keyboard:e,
+input:t,
+updateKeyboard:l.keyboard!==e,
+updateInput:!v&&l.input!==t,
+updateCmtInput:v&&l.cmtInput!==t
+});
+}),l.keyboard=e,l[v?"cmtInput":"input"]=t;
+};
+return{
+canUseKeyboard:c,
+canUseCancel:d,
+onlyUseH5Keyboard:u,
+lastData:l,
+onGetKeyboardHeight:function(e){
+-1===f.indexOf(e)&&(p||(p=!0,t.on("onGetKeyboardHeight",function(e){
+return k(e.height,e.inputHeight);
+})),f.push(e));
+},
+offGetKeyboardHeight:function(e){
+var t=f.indexOf(e);
+t>-1&&f.splice(t,1);
+},
+show:function(e){
+if(j()||e.forceFallback||e.forceFallbackIfUnsupport){
+if(b=e.cancel,g=e.hide,u||e.forceFallback){
+var n=function(){
+w=!0,m||(m=new i);
+var t=!1;
+return m.addListener("submit",function(){
+t=!0,"function"==typeof e.success&&e.success(m.getContent());
+}),m.addListener("hide",function(e){
+var n=m.getContent();
+t||"function"==typeof b&&b(n),"function"==typeof g&&g(n,e),t=!1;
+}),m.addListener("show",function(){
+"function"==typeof e.show&&e.show();
+}),m.addListener("input",function(){
+"function"==typeof e.input&&e.input(m.getContent());
+}),m.addListener("fail",function(){
+"function"==typeof e.fail&&e.fail();
+}),m.addListener("showEmotionPanel",function(t){
+"function"==typeof e.showEmotionPanel&&e.showEmotionPanel(t);
+}),m.addListener("hideEmotionPanel",function(){
+"function"==typeof e.hideEmotionPanel&&e.hideEmotionPanel();
+}),m.setContent(e.text||""),m.setLimit(e.maxLength||0),m.setPlaceholder(e.placeholder||""),
+m.show(e.toggleEmotion,e.isFullscreen,e.isLandscape),{
+v:void 0
+};
+}();
+if("object"===("undefined"==typeof n?"undefined":_typeof(n)))return n.v;
+}
+w=!1;
+var o={
+text:e.text||"",
+placeholder:"native"+(e.placeholder||""),
+maxLength:e.maxLength||0,
+showRemindWordCount:e.showRemindWordCount||0,
+disableScrollAdjustment:void 0===e.disableScrollAdjustment?!0:e.disableScrollAdjustment
+};
+e.scrollContentY&&(o.scrollContentY=e.scrollContentY),e.mask&&h&&(h.style.display=""),
+y=!!e.disableScroll,"comment"===e.type?(v=!0,o.customParams={
+showType:1,
+sendButtonWord:"留言",
+leftWords:"写留言",
+rightWords:"取消",
+editBoxHeight:120
+}):"reply"===e.type&&(o.customParams={
+showType:0,
+sendButtonWord:"回复"
+}),t.invoke("showKeyboard",o,function(t){
+switch(v=!1,h&&(h.style.display="none"),t.err_msg){
+case"showKeyboard:ok":
+"function"==typeof e.success&&e.success(t.text);
+break;
+
+case"showKeyboard:cancel":
+"function"==typeof b&&b(t.text);
+}
+"function"==typeof g&&g(t.text);
+}),"function"==typeof e.show&&e.show();
+}
+},
+hide:function(){
+u?m&&m.hide():t.invoke("showKeyboard",{
+hidden:!0
+});
+}
+};
+});define("appmsg/i18n.js",[],function(e,n){
+"use strict";
+n.dealLikeReadShow_en=function(e){
+if("undefined"==typeof LANG||!LANG)return 0===parseInt(e)?"":e;
+if("en"==LANG){
+var n="";
+if(parseInt(e)>1e5)n="100k+";else if(parseInt(e)>1e4&&parseInt(e)<=1e5){
+var r=""+parseInt(e)/1e3,t=r.indexOf(".");
+n=-1===t?r+"k":r.substr(0,t)+"."+r.charAt(t+1)+"k";
+}else n=0===parseInt(e)?"":e;
+return n;
+}
+return"";
+};
+});!function(e){
+var c="object"==typeof window&&window||"object"==typeof self&&self;
+"function"==typeof define?define("biz_common/utils/emoji_data.js",[],function(c,o){
+"use strict";
+return e(o);
+}):c&&"undefined"==typeof c.__emojiData&&(c.__emojiData=e({}));
+}(function(){
+return[{
+id:0,
+cn:"[微笑]",
+hk:"[微笑]",
+us:"[Smile]",
+code:"/::)",
+web_code:"/微笑",
+style:"icon_smiley_0"
+},{
+id:1,
+cn:"[撇嘴]",
+hk:"[撇嘴]",
+us:"[Grimace]",
+code:"/::~",
+web_code:"/撇嘴",
+style:"icon_smiley_1"
+},{
+id:2,
+cn:"[色]",
+hk:"[色]",
+us:"[Drool]",
+code:"/::B",
+web_code:"/色",
+style:"icon_smiley_2"
+},{
+id:3,
+cn:"[发呆]",
+hk:"[發呆]",
+us:"[Scowl]",
+code:"/::|",
+web_code:"/发呆",
+style:"icon_smiley_3"
+},{
+id:4,
+cn:"[得意]",
+hk:"[得意]",
+us:"[CoolGuy]",
+code:"/:8-)",
+web_code:"/得意",
+style:"icon_smiley_4"
+},{
+id:5,
+cn:"[流泪]",
+hk:"[流淚]",
+us:"[Sob]",
+code:"/::<",
+web_code:"/流泪",
+style:"icon_smiley_5"
+},{
+id:6,
+cn:"[害羞]",
+hk:"[害羞]",
+us:"[Shy]",
+code:"/::$",
+web_code:"/害羞",
+style:"icon_smiley_6"
+},{
+id:7,
+cn:"[闭嘴]",
+hk:"[閉嘴]",
+us:"[Silent]",
+code:"/::X",
+web_code:"/闭嘴",
+style:"icon_smiley_7"
+},{
+id:8,
+cn:"[睡]",
+hk:"[睡]",
+us:"[Sleep]",
+code:"/::Z",
+web_code:"/睡",
+style:"icon_smiley_8"
+},{
+id:9,
+cn:"[大哭]",
+hk:"[大哭]",
+us:"[Cry]",
+code:"/::'(",
+web_code:"/大哭",
+style:"icon_smiley_9"
+},{
+id:10,
+cn:"[尴尬]",
+hk:"[尷尬]",
+us:"[Awkward]",
+code:"/::-|",
+web_code:"/尴尬",
+style:"icon_smiley_10"
+},{
+id:11,
+cn:"[发怒]",
+hk:"[發怒]",
+us:"[Angry]",
+code:"/::@",
+web_code:"/发怒",
+style:"icon_smiley_11"
+},{
+id:12,
+cn:"[调皮]",
+hk:"[調皮]",
+us:"[Tongue]",
+code:"/::P",
+web_code:"/调皮",
+style:"icon_smiley_12"
+},{
+id:13,
+cn:"[呲牙]",
+hk:"[呲牙]",
+us:"[Grin]",
+code:"/::D",
+web_code:"/呲牙",
+style:"icon_smiley_13"
+},{
+id:14,
+cn:"[惊讶]",
+hk:"[驚訝]",
+us:"[Surprise]",
+code:"/::O",
+web_code:"/惊讶",
+style:"icon_smiley_14"
+},{
+id:15,
+cn:"[难过]",
+hk:"[難過]",
+us:"[Frown]",
+code:"/::(",
+web_code:"/难过",
+style:"icon_smiley_15"
+},{
+id:16,
+cn:"[酷]",
+hk:"[酷]",
+us:"[Ruthless]",
+code:"/::+",
+web_code:"/酷",
+style:"icon_smiley_16"
+},{
+id:17,
+cn:"[冷汗]",
+hk:"[冷汗]",
+us:"[Blush]",
+code:"/:--b",
+web_code:"/冷汗",
+style:"icon_smiley_17"
+},{
+id:18,
+cn:"[抓狂]",
+hk:"[抓狂]",
+us:"[Scream]",
+code:"/::Q",
+web_code:"/抓狂",
+style:"icon_smiley_18"
+},{
+id:19,
+cn:"[吐]",
+hk:"[吐]",
+us:"[Puke]",
+code:"/::T",
+web_code:"/吐",
+style:"icon_smiley_19"
+},{
+id:20,
+cn:"[偷笑]",
+hk:"[偷笑]",
+us:"[Chuckle]",
+code:"/:,@P",
+web_code:"/偷笑",
+style:"icon_smiley_20"
+},{
+id:21,
+cn:"[愉快]",
+hk:"[愉快]",
+us:"[Joyful]",
+code:"/:,@-D",
+web_code:"/可爱",
+style:"icon_smiley_21"
+},{
+id:22,
+cn:"[白眼]",
+hk:"[白眼]",
+us:"[Slight]",
+code:"/::d",
+web_code:"/白眼",
+style:"icon_smiley_22"
+},{
+id:23,
+cn:"[傲慢]",
+hk:"[傲慢]",
+us:"[Smug]",
+code:"/:,@o",
+web_code:"/傲慢",
+style:"icon_smiley_23"
+},{
+id:24,
+cn:"[饥饿]",
+hk:"[饑餓]",
+us:"[Hungry]",
+code:"/::g",
+web_code:"/饥饿",
+style:"icon_smiley_24"
+},{
+id:25,
+cn:"[困]",
+hk:"[累]",
+us:"[Drowsy]",
+code:"/:|-)",
+web_code:"/困",
+style:"icon_smiley_25"
+},{
+id:26,
+cn:"[惊恐]",
+hk:"[驚恐]",
+us:"[Panic]",
+code:"/::!",
+web_code:"/惊恐",
+style:"icon_smiley_26"
+},{
+id:27,
+cn:"[流汗]",
+hk:"[流汗]",
+us:"[Sweat]",
+code:"/::L",
+web_code:"/流汗",
+style:"icon_smiley_27"
+},{
+id:28,
+cn:"[憨笑]",
+hk:"[大笑]",
+us:"[Laugh]",
+code:"/::>",
+web_code:"/憨笑",
+style:"icon_smiley_28"
+},{
+id:29,
+cn:"[悠闲]",
+hk:"[悠閑]",
+us:"[Commando]",
+code:"/::,@",
+web_code:"/大兵",
+style:"icon_smiley_29"
+},{
+id:30,
+cn:"[奋斗]",
+hk:"[奮鬥]",
+us:"[Determined]",
+code:"/:,@f",
+web_code:"/奋斗",
+style:"icon_smiley_30"
+},{
+id:31,
+cn:"[咒骂]",
+hk:"[咒罵]",
+us:"[Scold]",
+code:"/::-S",
+web_code:"/咒骂",
+style:"icon_smiley_31"
+},{
+id:32,
+cn:"[疑问]",
+hk:"[疑問]",
+us:"[Shocked]",
+code:"/:?",
+web_code:"/疑问",
+style:"icon_smiley_32"
+},{
+id:33,
+cn:"[嘘]",
+hk:"[噓]",
+us:"[Shhh]",
+code:"/:,@x",
+web_code:"/嘘",
+style:"icon_smiley_33"
+},{
+id:34,
+cn:"[晕]",
+hk:"[暈]",
+us:"[Dizzy]",
+code:"/:,@@",
+web_code:"/晕",
+style:"icon_smiley_34"
+},{
+id:35,
+cn:"[疯了]",
+hk:"[瘋了]",
+us:"[Tormented]",
+code:"/::8",
+web_code:"/折磨",
+style:"icon_smiley_35"
+},{
+id:36,
+cn:"[衰]",
+hk:"[衰]",
+us:"[Toasted]",
+code:"/:,@!",
+web_code:"/衰",
+style:"icon_smiley_36"
+},{
+id:37,
+cn:"[骷髅]",
+hk:"[骷髏頭]",
+us:"[Skull]",
+code:"/:!!!",
+web_code:"/骷髅",
+style:"icon_smiley_37"
+},{
+id:38,
+cn:"[敲打]",
+hk:"[敲打]",
+us:"[Hammer]",
+code:"/:xx",
+web_code:"/敲打",
+style:"icon_smiley_38"
+},{
+id:39,
+cn:"[再见]",
+hk:"[再見]",
+us:"[Wave]",
+code:"/:bye",
+web_code:"/再见",
+style:"icon_smiley_39"
+},{
+id:40,
+cn:"[擦汗]",
+hk:"[擦汗]",
+us:"[Speechless]",
+code:"/:wipe",
+web_code:"/擦汗",
+style:"icon_smiley_40"
+},{
+id:41,
+cn:"[抠鼻]",
+hk:"[摳鼻]",
+us:"[NosePick]",
+code:"/:dig",
+web_code:"/抠鼻",
+style:"icon_smiley_41"
+},{
+id:42,
+cn:"[鼓掌]",
+hk:"[鼓掌]",
+us:"[Clap]",
+code:"/:handclap",
+web_code:"/鼓掌",
+style:"icon_smiley_42"
+},{
+id:43,
+cn:"[糗大了]",
+hk:"[羞辱]",
+us:"[Shame]",
+code:"/:&-(",
+web_code:"/糗大了",
+style:"icon_smiley_43"
+},{
+id:44,
+cn:"[坏笑]",
+hk:"[壞笑]",
+us:"[Trick]",
+code:"/:B-)",
+web_code:"/坏笑",
+style:"icon_smiley_44"
+},{
+id:45,
+cn:"[左哼哼]",
+hk:"[左哼哼]",
+us:"[Bah！L]",
+code:"/:<@",
+web_code:"/左哼哼",
+style:"icon_smiley_45"
+},{
+id:46,
+cn:"[右哼哼]",
+hk:"[右哼哼]",
+us:"[Bah！R]",
+code:"/:@>",
+web_code:"/右哼哼",
+style:"icon_smiley_46"
+},{
+id:47,
+cn:"[哈欠]",
+hk:"[哈欠]",
+us:"[Yawn]",
+code:"/::-O",
+web_code:"/哈欠",
+style:"icon_smiley_47"
+},{
+id:48,
+cn:"[鄙视]",
+hk:"[鄙視]",
+us:"[Pooh-pooh]",
+code:"/:>-|",
+web_code:"/鄙视",
+style:"icon_smiley_48"
+},{
+id:49,
+cn:"[委屈]",
+hk:"[委屈]",
+us:"[Shrunken]",
+code:"/:P-(",
+web_code:"/委屈",
+style:"icon_smiley_49"
+},{
+id:50,
+cn:"[快哭了]",
+hk:"[快哭了]",
+us:"[TearingUp]",
+code:"/::'|",
+web_code:"/快哭了",
+style:"icon_smiley_50"
+},{
+id:51,
+cn:"[阴险]",
+hk:"[陰險]",
+us:"[Sly]",
+code:"/:X-)",
+web_code:"/阴险",
+style:"icon_smiley_51"
+},{
+id:52,
+cn:"[亲亲]",
+hk:"[親親]",
+us:"[Kiss]",
+code:"/::*",
+web_code:"/亲亲",
+style:"icon_smiley_52"
+},{
+id:53,
+cn:"[吓]",
+hk:"[嚇]",
+us:"[Wrath]",
+code:"/:@x",
+web_code:"/吓",
+style:"icon_smiley_53"
+},{
+id:54,
+cn:"[可怜]",
+hk:"[可憐]",
+us:"[Whimper]",
+code:"/:8*",
+web_code:"/可怜",
+style:"icon_smiley_54"
+},{
+id:55,
+cn:"[菜刀]",
+hk:"[菜刀]",
+us:"[Cleaver]",
+code:"/:pd",
+web_code:"/菜刀",
+style:"icon_smiley_55"
+},{
+id:56,
+cn:"[西瓜]",
+hk:"[西瓜]",
+us:"[Watermelon]",
+code:"/:<W>",
+web_code:"/西瓜",
+style:"icon_smiley_56"
+},{
+id:57,
+cn:"[啤酒]",
+hk:"[啤酒]",
+us:"[Beer]",
+code:"/:beer",
+web_code:"/啤酒",
+style:"icon_smiley_57"
+},{
+id:58,
+cn:"[篮球]",
+hk:"[籃球]",
+us:"[Basketball]",
+code:"/:basketb",
+web_code:"/篮球",
+style:"icon_smiley_58"
+},{
+id:59,
+cn:"[乒乓]",
+hk:"[乒乓]",
+us:"[PingPong]",
+code:"/:oo",
+web_code:"/乒乓",
+style:"icon_smiley_59"
+},{
+id:60,
+cn:"[咖啡]",
+hk:"[咖啡]",
+us:"[Coffee]",
+code:"/:coffee",
+web_code:"/咖啡",
+style:"icon_smiley_60"
+},{
+id:61,
+cn:"[饭]",
+hk:"[飯]",
+us:"[Rice]",
+code:"/:eat",
+web_code:"/饭",
+style:"icon_smiley_61"
+},{
+id:62,
+cn:"[猪头]",
+hk:"[豬頭]",
+us:"[Pig]",
+code:"/:pig",
+web_code:"/猪头",
+style:"icon_smiley_62"
+},{
+id:63,
+cn:"[玫瑰]",
+hk:"[玫瑰]",
+us:"[Rose]",
+code:"/:rose",
+web_code:"/玫瑰",
+style:"icon_smiley_63"
+},{
+id:64,
+cn:"[凋谢]",
+hk:"[枯萎]",
+us:"[Wilt]",
+code:"/:fade",
+web_code:"/凋谢",
+style:"icon_smiley_64"
+},{
+id:65,
+cn:"[嘴唇]",
+hk:"[嘴唇]",
+us:"[Lips]",
+code:"/:showlove",
+web_code:"/示爱",
+style:"icon_smiley_65"
+},{
+id:66,
+cn:"[爱心]",
+hk:"[愛心]",
+us:"[Heart]",
+code:"/:heart",
+web_code:"/爱心",
+style:"icon_smiley_66"
+},{
+id:67,
+cn:"[心碎]",
+hk:"[心碎]",
+us:"[BrokenHeart]",
+code:"/:break",
+web_code:"/心碎",
+style:"icon_smiley_67"
+},{
+id:68,
+cn:"[蛋糕]",
+hk:"[蛋糕]",
+us:"[Cake]",
+code:"/:cake",
+web_code:"/蛋糕",
+style:"icon_smiley_68"
+},{
+id:69,
+cn:"[闪电]",
+hk:"[閃電]",
+us:"[Lightning]",
+code:"/:li",
+web_code:"/闪电",
+style:"icon_smiley_69"
+},{
+id:70,
+cn:"[炸弹]",
+hk:"[炸彈]",
+us:"[Bomb]",
+code:"/:bome",
+web_code:"/炸弹",
+style:"icon_smiley_70"
+},{
+id:71,
+cn:"[刀]",
+hk:"[刀]",
+us:"[Dagger]",
+code:"/:kn",
+web_code:"/刀",
+style:"icon_smiley_71"
+},{
+id:72,
+cn:"[足球]",
+hk:"[足球]",
+us:"[Soccer]",
+code:"/:footb",
+web_code:"/足球",
+style:"icon_smiley_72"
+},{
+id:73,
+cn:"[瓢虫]",
+hk:"[甲蟲]",
+us:"[Ladybug]",
+code:"/:ladybug",
+web_code:"/瓢虫",
+style:"icon_smiley_73"
+},{
+id:74,
+cn:"[便便]",
+hk:"[便便]",
+us:"[Poop]",
+code:"/:shit",
+web_code:"/便便",
+style:"icon_smiley_74"
+},{
+id:75,
+cn:"[月亮]",
+hk:"[月亮]",
+us:"[Moon]",
+code:"/:moon",
+web_code:"/月亮",
+style:"icon_smiley_75"
+},{
+id:76,
+cn:"[太阳]",
+hk:"[太陽]",
+us:"[Sun]",
+code:"/:sun",
+web_code:"/太阳",
+style:"icon_smiley_76"
+},{
+id:77,
+cn:"[礼物]",
+hk:"[禮物]",
+us:"[Gift]",
+code:"/:gift",
+web_code:"/礼物",
+style:"icon_smiley_77"
+},{
+id:78,
+cn:"[拥抱]",
+hk:"[擁抱]",
+us:"[Hug]",
+code:"/:hug",
+web_code:"/拥抱",
+style:"icon_smiley_78"
+},{
+id:79,
+cn:"[强]",
+hk:"[強]",
+us:"[ThumbsUp]",
+code:"/:strong",
+web_code:"/强",
+style:"icon_smiley_79"
+},{
+id:80,
+cn:"[弱]",
+hk:"[弱]",
+us:"[ThumbsDown]",
+code:"/:weak",
+web_code:"/弱",
+style:"icon_smiley_80"
+},{
+id:81,
+cn:"[握手]",
+hk:"[握手]",
+us:"[Shake]",
+code:"/:share",
+web_code:"/握手",
+style:"icon_smiley_81"
+},{
+id:82,
+cn:"[胜利]",
+hk:"[勝利]",
+us:"[Peace]",
+code:"/:v",
+web_code:"/胜利",
+style:"icon_smiley_82"
+},{
+id:83,
+cn:"[抱拳]",
+hk:"[抱拳]",
+us:"[Fight]",
+code:"/:@)",
+web_code:"/抱拳",
+style:"icon_smiley_83"
+},{
+id:84,
+cn:"[勾引]",
+hk:"[勾引]",
+us:"[Beckon]",
+code:"/:jj",
+web_code:"/勾引",
+style:"icon_smiley_84"
+},{
+id:85,
+cn:"[拳头]",
+hk:"[拳頭]",
+us:"[Fist]",
+code:"/:@@",
+web_code:"/拳头",
+style:"icon_smiley_85"
+},{
+id:86,
+cn:"[差劲]",
+hk:"[差勁]",
+us:"[Pinky]",
+code:"/:bad",
+web_code:"/差劲",
+style:"icon_smiley_86"
+},{
+id:87,
+cn:"[爱你]",
+hk:"[愛你]",
+us:"[RockOn]",
+code:"/:lvu",
+web_code:"/爱你",
+style:"icon_smiley_87"
+},{
+id:88,
+cn:"[NO]",
+hk:"[NO]",
+us:"[Nuh-uh]",
+code:"/:no",
+web_code:"/NO",
+style:"icon_smiley_88"
+},{
+id:89,
+cn:"[OK]",
+hk:"[OK]",
+us:"[OK]",
+code:"/:ok",
+web_code:"/OK",
+style:"icon_smiley_89"
+},{
+id:90,
+cn:"[爱情]",
+hk:"[愛情]",
+us:"[InLove]",
+code:"/:love",
+web_code:"/爱情",
+style:"icon_smiley_90"
+},{
+id:91,
+cn:"[飞吻]",
+hk:"[飛吻]",
+us:"[Blowkiss]",
+code:"/:<L>",
+web_code:"/飞吻",
+style:"icon_smiley_91"
+},{
+id:92,
+cn:"[跳跳]",
+hk:"[跳跳]",
+us:"[Waddle]",
+code:"/:jump",
+web_code:"/跳跳",
+style:"icon_smiley_92"
+},{
+id:93,
+cn:"[发抖]",
+hk:"[發抖]",
+us:"[Tremble]",
+code:"/:shake",
+web_code:"/发抖",
+style:"icon_smiley_93"
+},{
+id:94,
+cn:"[怄火]",
+hk:"[噴火]",
+us:"[Aaagh!]",
+code:"/:<O>",
+web_code:"/怄火",
+style:"icon_smiley_94"
+},{
+id:95,
+cn:"[转圈]",
+hk:"[轉圈]",
+us:"[Twirl]",
+code:"/:circle",
+web_code:"/转圈",
+style:"icon_smiley_95"
+},{
+id:96,
+cn:"[磕头]",
+hk:"[磕頭]",
+us:"[Kotow]",
+code:"/:kotow",
+web_code:"/磕头",
+style:"icon_smiley_96"
+},{
+id:97,
+cn:"[回头]",
+hk:"[回頭]",
+us:"[Dramatic]",
+code:"/:turn",
+web_code:"/回头",
+style:"icon_smiley_97"
+},{
+id:98,
+cn:"[跳绳]",
+hk:"[跳繩]",
+us:"[JumpRope]",
+code:"/:skip",
+web_code:"/跳绳",
+style:"icon_smiley_98"
+},{
+id:99,
+cn:"[投降]",
+hk:"[投降]",
+us:"[Surrender]",
+code:"/:oY",
+web_code:"/挥手",
+style:"icon_smiley_99"
+},{
+id:100,
+cn:"[激动]",
+hk:"[激動]",
+us:"[Hooray]",
+code:"/:#-0",
+web_code:"/激动",
+style:"icon_smiley_100"
+},{
+id:101,
+cn:"[乱舞]",
+hk:"[亂舞]",
+us:"[Meditate]",
+code:"/:hiphot",
+web_code:"/街舞",
+style:"icon_smiley_101"
+},{
+id:102,
+cn:"[献吻]",
+hk:"[獻吻]",
+us:"[Smooch]",
+code:"/:kiss",
+web_code:"/献吻",
+style:"icon_smiley_102"
+},{
+id:103,
+cn:"[左太极]",
+hk:"[左太極]",
+us:"[TaiChi L]",
+code:"/:<&",
+web_code:"/左太极",
+style:"icon_smiley_103"
+},{
+id:104,
+cn:"[右太极]",
+hk:"[右太極]",
+us:"[TaiChi R]",
+code:"/:&>",
+web_code:"/右太极",
+style:"icon_smiley_104"
+},{
+id:204,
+cn:"[嘿哈]",
+hk:"[吼嘿]",
+us:"[Hey]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_4"
+},{
+id:205,
+cn:"[捂脸]",
+hk:"[掩面]",
+us:"[Facepalm]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_5"
+},{
+id:202,
+cn:"[奸笑]",
+hk:"[奸笑]",
+us:"[Smirk]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_2"
+},{
+id:206,
+cn:"[机智]",
+hk:"[機智]",
+us:"[Smart]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_6"
+},{
+id:212,
+cn:"[皱眉]",
+hk:"[皺眉]",
+us:"[Moue]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_12"
+},{
+id:211,
+cn:"[耶]",
+hk:"[歐耶]",
+us:"[Yeah!]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_11"
+},{
+id:207,
+cn:"[茶]",
+hk:"[茶]",
+us:"[Tea]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_7"
+},{
+id:209,
+cn:"[红包]",
+hk:"[Packet]",
+us:"[Packet]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_9"
+},{
+id:210,
+cn:"[蜡烛]",
+hk:"[蠟燭]",
+us:"[Candle]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_10"
+},{
+id:215,
+cn:"[福]",
+hk:"[福]",
+us:"[Blessing]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_15"
+},{
+id:214,
+cn:"[鸡]",
+hk:"[小雞]",
+us:"[Chick]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_14"
+},{
+id:300,
+cn:"[笑脸]",
+emoji:"😄",
+hk:"",
+us:"",
+code:"\\ue415",
+web_code:"",
+style:"icon_emoji_ios_0"
+},{
+id:301,
+cn:"[生病]",
+emoji:"😷",
+hk:"",
+us:"",
+code:"\\ue40c",
+web_code:"",
+style:"icon_emoji_ios_1"
+},{
+id:302,
+cn:"[破涕为笑]",
+emoji:"😂",
+hk:"",
+us:"",
+code:"\\ue412",
+web_code:"",
+style:"icon_emoji_ios_2"
+},{
+id:303,
+cn:"[吐舌]",
+emoji:"😝",
+hk:"",
+us:"",
+code:"\\ue409",
+web_code:"",
+style:"icon_emoji_ios_3"
+},{
+id:304,
+cn:"[脸红]",
+emoji:"😳",
+hk:"",
+us:"",
+code:"\\ue40d",
+web_code:"",
+style:"icon_emoji_ios_4"
+},{
+id:305,
+cn:"[恐惧]",
+emoji:"😱",
+hk:"",
+us:"",
+code:"\\ue107",
+web_code:"",
+style:"icon_emoji_ios_5"
+},{
+id:306,
+cn:"[失望]",
+emoji:"😔",
+hk:"",
+us:"",
+code:"\\ue403",
+web_code:"",
+style:"icon_emoji_ios_6"
+},{
+id:307,
+cn:"[无语]",
+emoji:"😒",
+hk:"",
+us:"",
+code:"\\ue40e",
+web_code:"",
+style:"icon_emoji_ios_7"
+},{
+id:308,
+cn:"[鬼魂]",
+emoji:"👻",
+hk:"",
+us:"",
+code:"\\ue11b",
+web_code:"",
+style:"icon_emoji_ios_8"
+},{
+id:309,
+cn:"[合十]",
+emoji:"🙏",
+hk:"",
+us:"[Worship]",
+code:"\\ue41d",
+web_code:"",
+style:"icon_emoji_ios_9"
+},{
+id:310,
+cn:"[强壮]",
+emoji:"💪",
+hk:"",
+us:"",
+code:"\\ue14c",
+web_code:"",
+style:"icon_emoji_ios_10"
+},{
+id:311,
+cn:"[庆祝]",
+emoji:"🎉",
+hk:"",
+us:"[Party]",
+code:"\\ue312",
+web_code:"",
+style:"icon_emoji_ios_11"
+},{
+id:312,
+cn:"[礼物]",
+emoji:"🎁",
+hk:"",
+us:"",
+code:"\\ue112",
+web_code:"",
+style:"icon_emoji_ios_12"
+},{
+id:313,
+cn:"[吃瓜]",
+hk:"[吃西瓜]",
+us:"[Onlooker]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Watermelon"
+},{
+id:314,
+cn:"[加油]",
+hk:"[加油]",
+us:"[GoForIt]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Addoil"
+},{
+id:315,
+cn:"[汗]",
+hk:"[汗]",
+us:"[Sweats]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Sweat"
+},{
+id:316,
+cn:"[天啊]",
+hk:"[天啊]",
+us:"[OMG]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Shocked"
+},{
+id:317,
+cn:"[Emm]",
+hk:"[一言難盡]",
+us:"[Emm]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Cold"
+},{
+id:318,
+cn:"[社会社会]",
+hk:"[失敬失敬]",
+us:"[Respect]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Social"
+},{
+id:319,
+cn:"[旺柴]",
+hk:"[旺柴]",
+us:"[Doge]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Yellowdog"
+},{
+id:320,
+cn:"[好的]",
+hk:"[好的]",
+us:"[NoProb]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_NoProb"
+},{
+id:321,
+cn:"[打脸]",
+hk:"[打臉]",
+us:"[MyBad]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Slap"
+},{
+id:322,
+cn:"[加油加油]",
+hk:"[加油！]",
+us:"[KeepFighting]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_KeepFighting"
+},{
+id:323,
+cn:"[哇]",
+hk:"[哇]",
+us:"[Wow]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Wow"
+},{
+id:324,
+cn:"[發]",
+hk:"[發]",
+us:"[Rich]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_16"
+},{
+id:"17_1",
+cn:"[囧]",
+hk:"[囧]",
+us:"[Blush]",
+code:"",
+web_code:"",
+style:"icon_smiley_17"
+},{
+id:"39_1",
+cn:"[再见]",
+hk:"[再見]",
+us:"[Bye]",
+code:"",
+web_code:"",
+style:"icon_smiley_39"
+},{
+id:"83_1",
+cn:"[抱拳]",
+hk:"[抱拳]",
+us:"[Salute]",
+code:"",
+web_code:"",
+style:"icon_smiley_83"
+},{
+id:"212_1",
+cn:"[皱眉]",
+hk:"[皺眉]",
+us:"[Concerned]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_12"
+},{
+id:325,
+cn:"[裂开]",
+hk:"[崩潰]",
+us:"[Broken]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Broken"
+},{
+id:326,
+cn:"[苦涩]",
+hk:"[難受]",
+us:"[Hurt]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Hurt"
+},{
+id:327,
+cn:"[叹气]",
+hk:"[嘆息]",
+us:"[Sigh]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Sigh"
+},{
+id:328,
+cn:"[让我看看]",
+hk:"[讓我看看]",
+us:"[LetMeSee]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_LetMeSee"
+},{
+id:329,
+cn:"[666]",
+hk:"[666]",
+us:"[Awesome]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Awesome"
+},{
+id:330,
+cn:"[翻白眼]",
+hk:"[翻白眼]",
+us:"[Boring]",
+code:"",
+web_code:"",
+style:"icon_emoji_wx_Boring"
+},{
+id:331,
+cn:"[烟花]",
+hk:"[煙花]",
+us:"[Fireworks]",
+code:"",
+web_code:"",
+style:"we-emoji__Fireworks"
+},{
+id:332,
+cn:"[爆竹]",
+hk:"[爆竹]",
+us:"[Firecracker]",
+code:"",
+web_code:"",
+style:"we-emoji__Firecracker"
+}];
+});function _defineProperty(e,t,n){
+return t in e?Object.defineProperty(e,t,{
+value:n,
+enumerable:!0,
+configurable:!0,
+writable:!0
+}):e[t]=n,e;
+}
+function _typeof(e){
+return e&&"undefined"!=typeof Symbol&&e.constructor===Symbol?"symbol":typeof e;
+}
+var _extends=Object.assign||function(e){
+for(var t=1;t<arguments.length;t++){
+var n=arguments[t];
+for(var i in n)Object.prototype.hasOwnProperty.call(n,i)&&(e[i]=n[i]);
+}
+return e;
+};
+define("video/video_tail_utils.js",["biz_wap/utils/ajax.js","biz_wap/jsapi/core.js","a/a_config.js","biz_common/utils/url/parse.js","a/a_utils.js","biz_wap/utils/mmversion.js","pages/utils.js","common/comm_report.js","biz_common/dom/event.js","biz_common/dom/class.js","common/utils.js"],function(e){
+"use strict";
+function t(e,t,n){
+if(H){
+var i={
+__videoTailPlayerId__:H,
+action:e,
+data:t
+};
+"function"==typeof n&&(i.callbackId=F+Q++,G[i.callbackId]=n),window.parent.postMessage(i,document.location.protocol+"//mp.weixin.qq.com");
+}else"function"!=typeof n&&(n=function(){}),z.invoke(e,t,n);
+}
+function n(e,t){
+"function"==typeof t&&(G[e]?G[e].push(t):G[e]=[t],z.on(e,t));
+}
+function i(e){
+"object"===_typeof(e.data)&&"string"==typeof e.data.hostEnvEvent&&G[e.data.hostEnvEvent]&&G[e.data.hostEnvEvent].forEach(function(t){
+return t(e.data.res);
+});
+}
+function o(){
+return C.cpVersion("7.0.9",1,!0);
+}
+function a(e){
+X=_extends(X,e);
+}
+function s(){
+var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];
+for(var t in e)e[t]&&(ot[t]=e[t]);
+}
+function r(){
+return R.hasClass(it,"has_ad")?1:0;
+}
+function d(){
+return _extends({
+ReportWithTailAd:r()
+},ot);
+}
+function c(){
+t("handleMPPageAction",{
+action:"closeAdWebview"
+});
+}
+function l(e){
+return o()||X.hasAd&&!e?void(e?X.hidePanelAd&&X.hidePanelAd():X.showTailPanel&&X.showTailPanel(X)):void c();
+}
+function u(){
+return H?q:window.innerWidth===screen.width&&window.innerHeight===screen.height||window.innerWidth===screen.height&&window.innerHeight===screen.width;
+}
+function p(e){
+var t;
+return M.join(location.origin+"/mp/authreadtemplate?t=pages/video_tail",(t={
+vid:window.cgiData.vid,
+item_show_type:window.item_show_type,
+idx:window.idx,
+mid:window.mid,
+sn:window.sn,
+scene:window.scene,
+appmsg_type:window.appmsg_type,
+msg_title:window.msg_title,
+ct:window.ct,
+send_time:window.send_time,
+abtest_cookie:window.abtest_cookie,
+msg_daily_idx:window.msg_daily_idx,
+user_uin:window.user_uin,
+__biz:window.biz,
+pos_type_list:9,
+get_ad_after_video:1
+},_defineProperty(t,D.HAS_AD_DATA_QUERY_KEY,e?1:0),_defineProperty(t,"enterid",window.enterid),
+_defineProperty(t,"subscene",window.subscene),_defineProperty(t,"oriStatus",window.cgiData.ori_status),
+_defineProperty(t,"hitBizUin",window.cgiData.hit_bizuin),_defineProperty(t,"hitVid",window.cgiData.hit_vid),
+_defineProperty(t,"sessionid",window.sessionid),_defineProperty(t,"devicetype",window.devicetype),
+_defineProperty(t,"playerType",B.getPlayerType()),_defineProperty(t,"hasSubscribed",X.hasSubscribed?1:0),
+_defineProperty(t,"continueid",window.continueid+""),_defineProperty(t,"continueseq",1*M.getQuery("continueseq")||1),
+t));
+}
+function _(e){
+at=e;
+}
+function f(e,t,n){
+if(!Y||n){
+var i=p(at)+"&wcslplayerId="+t;
+window.__second_open__?W({
+url:i,
+type:"GET",
+f:"html",
+success:function(t){
+e.setAttribute("src",i),e.contentWindow.document.open("text/html","replace"),e.contentWindow.document.write(t),
+e.contentWindow.document.close(),e.contentWindow.history.replaceState(null,null,i);
+}
+}):e.setAttribute("src",i),U=e,Y=!0;
+}
+}
+function m(e){
+Y||z.invoke("handleMPPageAction",{
+action:"createAdWebview",
+adUrl:p(e)
+},function(e){
+return e.err_msg.indexOf("fail")>-1?void k.report115849(40):void(Y=!0);
+});
+}
+function w(e){
+a({
+showTailPanel:e.showTailPanel,
+hidePanelAd:e.hidePanelAd
+}),n("onMPAdWebviewStateChange",function(e){
+"appear"===e.state&&(e.forceNoAd&&a({
+hasAd:!1
+}),l(),X.hasAd&&setTimeout(function(){
+X.showAd&&X.showAd();
+},10));
+});
+}
+function v(e){
+function t(){
+o=!0,setTimeout(function(){
+return a?void(o=!1):(s+=d,(X.canCreateTailWebview||r>=i-s)&&m(),void t());
+},1e3*d);
+}
+function n(){
+z.invoke("handleMPPageAction",{
+action:"getMPVideoState"
+},function(n){
+n.vid===e&&(s=parseInt(n.currentTime,10)>=parseInt(n.duration,10)?0:n.currentTime,
+i=n.duration,"play"===n.state&&!o&&t());
+});
+}
+var i=void 0,o=void 0,a=!1,s=0,r=10,d=.5;
+z.on("onMPVideoStateChange",function(e){
+"play"===e.state?(n(),a=!1):"enterFullScreen"!==e.state&&"exitFullScreen"!==e.state&&(a=!0);
+}),n();
+}
+function y(e){
+v(e),z.on("onMPAdWebviewStateChange",function(e){
+"destroy"===e.state&&(Y=!1);
+});
+}
+function b(e){
+n("onReceiveMPPageData",function(t){
+e&&e(t);
+});
+}
+function g(e,n){
+U&&"adWeb"===n?U.contentWindow.postMessage({
+hostEnvEvent:"onReceiveMPPageData",
+res:{
+data:e
+}
+},document.location.protocol+"//mp.weixin.qq.com"):t("handleMPPageAction",{
+action:"sendMPPageData",
+data:e,
+sendTo:n
+});
+}
+function h(e){
+var t=u(),n=void 0;
+n=r()?t?184:183:t?181:180,V.report(17149,_extends({
+EventType:t?46:47
+},d())),e.dataset.scene=n;
+}
+function P(e){
+Z&&(e?(et.style.display="none",tt.style.display="",!J&&(nt.style.display="")):(et.style.display="",
+tt.style.display="none",nt.style.display="none"),J=e);
+}
+function T(){
+if(Z){
+var e=u();
+e&&K||!e&&$||(V.report(17149,_extends({
+EventType:e?70:71
+},d())),e?K=!0:$=!0);
+}
+}
+function j(){
+V.report(17149,_extends({
+EventType:u()?72:73
+},d()));
+}
+function S(){
+return J;
+}
+function I(e){
+W({
+url:"/mp/videochannel_profile_page?action=check_contact&biz_username="+e.userName+"&__biz="+e.biz,
+dataType:"json",
+success:function(t){
+var n=1===t.subscribed;
+e.success&&e.success(n);
+}
+});
+}
+function E(e){
+function t(){
+I({
+userName:e.userName,
+biz:e.biz,
+success:function(e){
+P(e),T(),e&&g("hasSubscribed","commshareWeb");
+}
+});
+}
+O.getId("js_tail_panel_account_name").innerHTML=e.nickname,O.getId("js_tail_panel_account_avatar").src=e.headImg,
+e.subscribed||P(!1),e.notBindProfileEvt?!function(){
+var e=it.getElementsByClassName("js_go_profile")[0];
+N.tap(e,function(){
+h(e);
+});
+}():O.go2ProfileEvent({
+$container:it,
+user_name:e.userName,
+beforeGo2Profile:h,
+tabType:2
+}),Z&&(N.on(et,"tap",function(){
+var t=void 0;
+j(),t=u()?"186":"185",z.invoke("addContact",{
+webtype:"1",
+username:e.userName,
+scene:t,
+scenenote:e.pageUrl||""
+},function(e){
+e.err_msg.indexOf("ok")>-1&&(P(!0),g("hasSubscribed","commshareWeb"));
+});
+}),N.bindVisibilityChangeEvt(function(e){
+if(e){
+var n=3;
+t();
+for(var i=1;n>=i;i++)setTimeout(t,200*n);
+}
+}));
+}
+function A(){
+N.tap(O.getId("js_tail_share_button"),function(){
+V.report(17149,_extends({
+EventType:u()?53:54
+},d()));
+});
+}
+function x(e){
+if(!o()||!it)return void(e.fallback&&e.fallback());
+e.reportData.PlayerType=1,s(e.reportData),it.style.display="",$=!1;
+var t={
+Vid:ot.VideoId,
+BizUin:ot.BizUserName,
+msgid:ot.MsgId,
+itemidx:ot.Idx,
+Type:1,
+ClientTime:Date.now(),
+Fromid:ot.Scene,
+SessionId:ot.SessionIdStr,
+Device:C.isIOS?1:2
+};
+e.isAppMsg?V.report(12710,_extends({},ot,t,{
+Step:17,
+ClientTime:Date.now()
+})):(V.report(17149,_extends({
+EventType:65
+},ot)),V.report(17149,_extends({
+EventType:67
+},ot)),V.report(17149,_extends({
+EventType:69
+},ot)),(!e.subscribed&&!L||!J&&L)&&T()),L||(E(e),A(),N.tap(O.getId("js_replay"),function(){
+return it.style.display="none",e.replay&&e.replay(),e.isAppMsg?V.report(12710,_extends({},ot,t,{
+Step:18,
+ClientTime:Date.now()
+})):V.report(17149,_extends({
+EventType:52
+},ot)),!1;
+},!0),L=!0);
+}
+var W=e("biz_wap/utils/ajax.js"),z=e("biz_wap/jsapi/core.js"),D=e("a/a_config.js"),M=e("biz_common/utils/url/parse.js"),k=e("a/a_utils.js"),C=e("biz_wap/utils/mmversion.js"),O=e("pages/utils.js"),V=e("common/comm_report.js"),N=e("biz_common/dom/event.js"),R=e("biz_common/dom/class.js"),B=e("common/utils.js"),H=M.getQuery("wcslplayerId"),q=!1,U=null,F="video_tail_callback_",Q=0,G={};
+H&&window.addEventListener("message",function(e){
+"object"===_typeof(e.data)&&"string"==typeof e.data.callbackId&&e.data.callbackId.startsWith(F)?(G[e.data.callbackId]&&G[e.data.callbackId](e.data.res),
+delete G[e.data.callbackId]):i(e);
+});
+var L=!1,Y=!1,K=!1,$=!1,J=!0,X={},Z=C.isIOS&&C.cpVersion("7.0.15",1,!0);
+Z=Z||C.isAndroid&&C.cpVersion("7.0.17",1,!0);
+var et=O.getId("js_btn_account_subscription"),tt=O.getId("js_profile_icon"),nt=O.getId("js_subscription_success"),it=O.getId("js_video_tail_panel"),ot={
+EnterId:parseInt(Date.now()/1e3,10),
+ItemShowType:5
+};
+H&&n("onWcSlPlayerFullscreenChange",function(e){
+q=e.state,"string"==typeof e.padding&&(document.body.style.padding=e.padding);
+});
+var at=!1;
+return{
+createTailWebview:m,
+initEvent4TailWebview:w,
+listenAndCreateTailWebview:v,
+onReceiveMPPageData:b,
+setTailOpts:a,
+showTailPanel:l,
+sendMPPageData:g,
+handleTailWebviewState:y,
+closeTailWebview:c,
+initProfile:E,
+initWebTailPanel:x,
+isFullScreen:u,
+getSubscribedStatus:S,
+reportSubscribeBtnExpose:T,
+changeSubscribeStatus:P,
+getSubscribedData:I,
+supportTailPanel:o,
+getReportData:d,
+initShareBtnReport:A,
+setReportData:s,
+setHasAdData4WcSlPlayer:_,
+initTailIframe4WcSlPlayer:f,
+emitHostEnvEvent4WcSlPlayer:i,
+sendMessageToHostEnv:t
+};
+});function _typeof(e){
+return e&&"undefined"!=typeof Symbol&&e.constructor===Symbol?"symbol":typeof e;
+}
+function _toConsumableArray(e){
+if(Array.isArray(e)){
+for(var t=0,o=Array(e.length);t<e.length;t++)o[t]=e[t];
+return o;
+}
+return Array.from(e);
+}
+define("a/web_compt_ad.js",["biz_wap/utils/mmversion.js","common/utils.js","a/a_config.js","biz_common/utils/url/parse.js","a/a_utils.js","biz_common/dom/offset.js","biz_wap/utils/ajax.js","a/appdialog_confirm.js","biz_wap/jsapi/core.js","biz_wap/utils/jsmonitor_report.js"],function(e){
+"use strict";
+function t(e,t){
+return e+" | "+t;
+}
+function o(e,t){
+if(!e)return null;
+var o=t.aInfo;
+console.log("广告 "+o.aid+"使用了 web 组件渲染模式");
+var a=document.createElement("wx-ad");
+a.className="web_compt_ad",a.scrolling="no",a.createComptTime=Date.now();
+var i={
+adData:o,
+pageData:h(t,e,a.createComptTime)
+};
+return a.innerHTML='<template slot="renderData">'+JSON.stringify(i).htmlEncodeLite()+"</template>",
+e.appendChild(a),n.isIOS&&(a.style.width="1px",a.style.minWidth="100%"),p.report128729(0),
+a;
+}
+function a(){
+this.aInfoMap={};
+}
+var n=e("biz_wap/utils/mmversion.js"),i=e("common/utils.js"),r=e("a/a_config.js"),s=e("biz_common/utils/url/parse.js"),p=e("a/a_utils.js"),d=e("biz_common/dom/offset.js"),c=e("biz_wap/utils/ajax.js"),m=e("a/appdialog_confirm.js"),u=e("biz_wap/jsapi/core.js"),l=!!s.getQuery("mock")||!!s.getQuery("rtx"),f=e("biz_wap/utils/jsmonitor_report.js"),w=r.AD_POS,g=window.__report,_=document.getElementById("page-content"),y=document.getElementById("js_bottom_ad_area"),h=function(e,t,o){
+var a="8"===window.item_show_type&&i.isNativePage(),n="";
+return e.aInfo.pos_type===w.POS_MID&&(n=t&&t.dataset&&t.dataset.category_id_list),
+{
+biz:window.biz,
+uin:window.uin,
+scene:window.scene,
+source:window.source,
+idx:window.idx,
+mid:window.mid,
+isSg:window.isSg,
+userUin:window.user_uin,
+sn:window.sn,
+appmsgid:window.appmsgid,
+sendTime:window.send_time||"",
+passTicket:decodeURIComponent(window.pass_ticket),
+globalAdDebug:l,
+bodyScrollTop:i.getScrollTop(),
+contentOffsetHeight:_?_.offsetHeight:0,
+adOffsetTop:d.getOffset(t).offsetTop,
+screenHeight:i.getInnerHeight(),
+midCategoryIdList:n,
+heightWidthRate:e.heightWidthRate,
+createComptTime:o,
+skin:a?"black":"white"
+};
+};
+return a.prototype.config=function(e){
+this.configData=e;
+},a.prototype.handleAd=function(){
+var e=arguments.length<=0||void 0===arguments[0]?[]:arguments[0],t=arguments.length<=1||void 0===arguments[1]?0:arguments[1],o=0,a=this;
+this.midAdDataCount=t,this.webComptAdInfos=e,e.forEach(function(e){
+return a.aInfoMap[e.aid]={
+aInfo:e
+},e.pos_type===w.POS_MID?(a.initMidAd(a.aInfoMap[e.aid],o),void o++):void(e.pos_type===w.POS_BOTTOM&&a.initBottomAd(a.aInfoMap[e.aid]));
+});
+var n=document.getElementById("js_article");
+n&&n.addEventListener("click",function(){
+for(var e in a.aInfoMap)Object.prototype.hasOwnProperty.call(a.aInfoMap,e)&&a.aInfoMap[e].webComptEle&&a.aInfoMap[e].webComptEle.onClickOutside&&a.aInfoMap[e].webComptEle.onClickOutside();
+});
+},a.prototype.initMidAd=function(e,t){
+var a=e.aInfo;
+this.configData.insertAutoAdElement(a,!1,t,this.midAdDataCount);
+var n=document.getElementsByTagName("mpcpc")[t];
+if(n){
+var i=o(n,this.aInfoMap[a.aid]);
+p.report128729(1),this.aInfoMap[a.aid].webComptEle=i,this.addTagListeners(e,i),g&&g(125);
+}
+},a.prototype.initBottomAd=function(e){
+var t=e.aInfo,a=o(y,this.aInfoMap[t.aid]);
+p.report128729(2),this.aInfoMap[t.aid].webComptEle=a,this.addTagListeners(e,a);
+},a.prototype.warpProxyCallback=function(e,t,o){
+return function(){
+for(var a=arguments.length,n=Array(a),i=0;a>i;i++)n[i]=arguments[i];
+n=o&&"function"==typeof o?o.apply(void 0,_toConsumableArray(n)):n[0],t.data&&"openUrlWithExtraWebview"===t.data.methodName&&-1===n.err_msg.indexOf("ok")&&(location.href=t.data.args.url),
+e.proxyCallback({
+proxyId:t.proxyId,
+data:n
+});
+};
+},a.prototype.addTagListeners=function(e,o){
+var a=this,n=this,i=e.aInfo;
+o.addEventListener("ready",function(){
+o.setData({
+pageData:a.getPageData(e),
+adData:i
+});
+}),o.addEventListener("proxy",function(a){
+var i=a.detail;
+if(i)if("request"===i.proxyType)n.commonRequest(i.data,n.warpProxyCallback(o,i));else if("appDialogConfirm"===i.proxyType)m({
+app_name:i.data.app_name,
+app_img_url:i.data.icon_url,
+onOk:n.warpProxyCallback(o,i,function(){
+return{
+err_msg:"appDialogConfirm:yes"
+};
+}),
+onCancel:n.warpProxyCallback(o,i,function(){
+return{
+err_msg:"appDialogConfirm:cancel"
+};
+})
+});else if("jsapi"===i.proxyType){
+var s=function(){
+var a=n.checkApiInvokeValid(e,i.data);
+if("string"==typeof a)return n.warpProxyCallback(o,i,function(){
+return{
+err_msg:a
+};
+})(),{
+v:void 0
+};
+try{
+"on"===i.data.methodType?u[i.data.methodType](i.data.methodName,n.warpProxyCallback(o,i)):u[i.data.methodType](i.data.methodName,i.data.args,n.warpProxyCallback(o,i));
+}catch(s){
+console.error(s),n.warpProxyCallback(o,i,function(){
+return{
+err_msg:t(r.INVALID_METHOD_TYPE_MSG_PREFIX,i.data.methodType)
+};
+})();
+}
+}();
+if("object"===("undefined"==typeof s?"undefined":_typeof(s)))return s.v;
+}else console.error("unknow webCompt proxy:",i);else console.error("tag proxy without proxyData:",a);
+});
+},a.prototype.checkApiInvokeValid=function(e,o){
+if(!e)return"Invalid aid";
+var a=e.aInfo,n=o.methodName;
+return-1===r.AD_JSAPI_WHITE_LIST.indexOf(n)?t(r.INVALID_METHOD_NAME_MSG_PREFIX,n):"addContact"!==n&&"profile"!==n||a&&a.biz_info&&o.args.username===a.biz_info.user_name?("preloadMiniProgramContacts"===n&&f.setSum(114217,5,1),
+!0):t(r.INVALID_ARGS_MSG_PREFIX,"Invalid biz username");
+},a.prototype.commonRequest=function(e,o){
+var a=e||{},n=a.path&&p.checkRequestUrlAllowed(a.path);
+return n?void c({
+type:a.requestType,
+url:s.join(a.path,a.requestQuery||{}),
+data:a.requestBody||{},
+mayAbort:!0,
+success:function(e){
+o({
+err_msg:"request:success",
+response:e
+});
+},
+error:function(e,t){
+var a={};
+try{
+a={
+readyState:e.readyState,
+response:e.response,
+responseText:e.responseText,
+responseType:e.responseType,
+responseURL:e.responseURL,
+responseXML:e.responseXML,
+status:e.status,
+statusText:e.statusText,
+timeout:e.timeout
+};
+}catch(n){
+console.error(n);
+}
+o({
+err_msg:"request:error",
+xhr:a,
+err_info:t
+});
+}
+}):void o({
+err_msg:t(r.INVALID_REQ_PATH_MSG_PREFIX,a.path)
+});
+},a.prototype.getPageData=function(e){
+var t="8"===window.item_show_type&&i.isNativePage(),o=e.webComptEle.parentNode,a="";
+return e.aInfo.pos_type===w.POS_MID&&(a=o&&o.dataset&&o.dataset.category_id_list),
+{
+biz:window.biz,
+uin:window.uin,
+scene:window.scene,
+source:window.source,
+idx:window.idx,
+mid:window.mid,
+isSg:window.isSg,
+userUin:window.user_uin,
+sn:window.sn,
+appmsgid:window.appmsgid,
+sendTime:window.send_time||"",
+passTicket:decodeURIComponent(window.pass_ticket),
+globalAdDebug:l,
+bodyScrollTop:i.getScrollTop(),
+contentOffsetHeight:_?_.offsetHeight:0,
+adOffsetTop:d.getOffset(e.webComptEle).offsetTop,
+screenHeight:i.getInnerHeight(),
+midCategoryIdList:a,
+heightWidthRate:e.heightWidthRate,
+createComptTime:e.webComptEle.createComptTime,
+skin:t?"black":"white"
+};
+},a;
+});define("a/appdialog_confirm.js",["widget/wx_profile_dialog_primary.css","a/a_utils.js","common/utils.js","biz_wap/jsapi/core.js","biz_common/utils/url/parse.js","biz_common/tmpl.js","biz_common/dom/event.js","a/appdialog_confirm.html.js"],function(o){
+"use strict";
+o("widget/wx_profile_dialog_primary.css");
+var e=o("a/a_utils.js"),n=o("common/utils.js"),i=o("biz_wap/jsapi/core.js"),a=o("biz_common/utils/url/parse.js"),m=o("biz_common/tmpl.js"),c=o("biz_common/dom/event.js"),s=o("a/appdialog_confirm.html.js"),t=function(o){
+if(e.isVideoSharePageOnlyAd()||n.isNativePage()||a.getQuery("get_ad_after_video"))return void i.invoke("confirmDialog",{
+title:"是否立即下载该应用",
+contentDesc:o.app_name,
+confirmText:"下载",
+cancelText:"取消",
+msgIconUrl:o.app_img_url,
+msgIconWidth:50,
+msgIconHeight:50
+},function(e){
+e.err_msg.indexOf("confirmDialog:ok")>-1?o.onOk&&o.onOk():o.onCancel&&o.onCancel();
+});
+var t=document.createElement("div");
+t.innerHTML=m.tmpl(s,o,!1),document.body.appendChild(t),c.on(t.getElementsByClassName("js_ok")[0],"click",function(){
+o.onOk&&o.onOk(),document.body.removeChild(t);
+}),c.on(t.getElementsByClassName("js_cancel")[0],"click",function(){
+o.onCancel&&o.onCancel(),document.body.removeChild(t);
+});
+};
+return t;
+});
