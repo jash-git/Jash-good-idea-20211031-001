@@ -1,0 +1,15 @@
+https://www.newscan.com.tw/all-seo/seo-guide.htm
+
+如何檢測我的網站SEO?
+	關鍵字機會分析工具 Keyword Explorer - https://moz.com/explorer
+	網站速度檢測 Google Pagespeed - https://developers.google.com/speed/pagespeed/insights/?hl=zh-TW
+	網站速度分析工具 WebPagetest - https://www.webpagetest.org/
+	網站應用工具審查 Lighthouse Web App - https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk?hl=zh-tw
+	行動裝置相容性測試Google - https://search.google.com/test/mobile-friendly?utm_source=mft&utm_medium=redirect&utm_campaign=mft-redirect
+	網站優化工具 Google Search Console - https://www.google.com/webmasters/tools/home?hl=zh-TW
+	網站分析統計工具(1) Google Analytics - https://analytics.google.com/analytics/web/
+	網站分析統計工具(2) Clicky - https://clicky.com/
+	反向連結抓取工具(1) Open Site Explorer - https://moz.com/researchtools/ose/
+	反向連結抓取工具(2) Majestic - https://zh.majestic.com/
+	品牌知名度檢測工具(需註冊登入) Fresh Web Explorer - https://moz.com/researchtools/fwe/
+	圖片優化工具 TinyPNG - https://tinypng.com/
