@@ -1,0 +1,149 @@
+Qt基礎類型以及字符串類型
+
+資料來源: https://mp.weixin.qq.com/s/bMifji3zzj8x89CfcSKW_w
+
+QT基本數據類型定義在#include <QtGlobal>
+qint8    signed char    有符號8位數據
+qint16    signed short    16位數據類型
+qint32    signed short    32位有符號數據類型
+qint64    long long int 或(__int64)    64位有符號數據類型，Windows中定義為__int64
+qintptr    qint32 或qint64    指針類型根據系統類型不同而不同，32位系統為qint32、64位系統為qint64
+qlonglong    long long int 或(__int64)    Windows中定義為__int64
+qptrdiff    qint32 或qint64    根據系統類型不同而不同，32位系統為qint32、64位系統為qint64
+qreal    double 或float    除非配置了-qreal float選項，否則默認為double
+quint8    unsigned char    無符號8位數據類型
+quint16    unsigned short    無符號16位數據類型
+quint32    unsigned int    無符號32位數據類型
+quint64    unsigned long long int 或(unsigned __int64)    無符號64比特數據類型，Windows中定義為unsigned __int64
+quintptr    quint32 或quint64    根據系統類型不同而不同，32位系統為quint32、64位系統為quint64
+qulonglong    unsigned long long int 或(unsigned __int64)    Windows中定義為__int64
+uchar    unsigned char    無符號字符類型
+uint    unsigned int    無符號整型
+ulong    unsigned long    無符號長整型
+ushort    unsigned short    無符號短整型
+qsizetype    size_t    
+
+字串運算(合併/替換/插入/刪除)
+// 尾部追加数据
+ QString& append(const QString &str);
+ QString& append(const char *str);
+ QString& append(const QByteArray &ba);
+ void push_back(const QString &other);
+ 
+ // 头部添加数据
+ QString& prepend(const QString &str);
+ QString& prepend(const char *str);
+ QString& prepend(const QByteArray &ba);
+ void QString::push_front(const QString &other);
+ 
+ // 插入数据, 将 str 插入到字符串第 position 个字符的位置(从0开始)
+ QString& insert(int position, const QString &str);
+ QString& insert(int position, const char *str);
+ QString& insert(int position, const QByteArray &str);
+ 
+ // 删除数据
+ // 从大字符串中删除len个字符, 从第pos个字符的位置开始删除
+ QString& remove(int position, int n);
+ 
+ // 从字符串的尾部删除 n 个字符
+ void  chop(int n);
+ // 从字节串的 position 位置将字符串截断 (前边部分留下, 后边部分被删除)
+ void  truncate(int position);
+ // 将对象中的数据清空, 使其为null
+ void  clear();
+ 
+ // 字符串替换
+ // 将字节数组中的 子字符串 before 替换为 after
+ // 参数 cs 为是否区分大小写, 默认区分大小写
+ QString& replace(const QString &before, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
+
+子字串尋找/搜尋/查找和判斷
+ // 参数 cs 为是否区分大小写, 默认区分大小写
+ // 其他重载的同名函数可参考Qt帮助文档, 此处略
+ 
+ // 判断字符串中是否包含子字符串 str, 包含返回true, 否则返回false
+ bool  contains(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+ 
+ // 判断字符串是否以字符串 ba 开始, 是返回true, 不是返回false
+ bool startsWith(const QString &s, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+ 
+ // 判断字符串是否以字符串 ba 结尾, 是返回true, 不是返回false
+ bool endsWith(const QString &s, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+
+
+字串抓取字元
+ // 使用迭代器
+ iterator  begin();
+ iterator  end();
+ 
+ // 使用数组的方式进行遍历
+ const QChar  at(int position) const
+ const QChar  operator[](int position) const;
+
+取得字串長度
+ // 返回字节数组对象中字符的个数
+ int  length() const;
+ int  size() const;
+ int  count() const;
+ 
+ // 返回字节串对象中 子字符串 str 出现的次数
+ // 参数 cs 为是否区分大小写, 默认区分大小写
+ int  count(const QStringRef &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+
+類型轉換(資料型態轉換)
+ // int, short, long, float, double -> QString
+ // 其他重载的同名函数可参考Qt帮助文档, 此处略
+ QString& setNum(int n, int base = 10);
+ QString& setNum(short n, int base = 10);
+ QString& setNum(long n, int base = 10);
+ QString& setNum(float n, char format = 'g', int precision = 6);
+ QString&QString::setNum(double n, char format = 'g', int precision = 6);
+ [static] QString QString::number(long n, int base = 10);
+ [static] QString QString::number(int n, int base = 10);
+ [static] QString QString::number(double n, char format = 'g', int precision = 6);
+ 
+ // QString -> int, short, long, float, double
+ int QString::toInt(bool *ok = Q_NULLPTR, int base = 10) const;
+ short QString::toShort(bool *ok = Q_NULLPTR, int base = 10) const;
+ long QString::toLong(bool *ok = Q_NULLPTR, int base = 10) const
+ float QString::toFloat(bool *ok = Q_NULLPTR) const;
+ double QString::toDouble(bool *ok = Q_NULLPTR) const;
+ 
+ 
+ // 所有字符转换为大写
+ QString QString::toUpper() const;
+ // 所有字符转换为小写
+ QString QString::toLower() const;
+
+不同字符串類型相互轉換
+ // std::string -> QString
+ [static] QString QString::fromStdString(const std::string &str);
+ // QString -> std::string
+ std::string QString::toStdString() const;
+ 
+ //QString -> QByteArray
+ // 转换为本地编码, 跟随操作系统
+ QByteArray QString::toLocal8Bit() const;
+ // 转换为 Latin-1 编码的字符串 不支持中文
+ QByteArray QString::toLatin1() const;
+ // 转换为 utf8 编码格式的字符串 (常用)
+ QByteArray QString::toUtf8() const;
+ 
+ //QByteArray -> QString
+ //使用QString的构造函数即可
+
+字符串格式化
+ //C語言中有sprintf()函數，QString也提供了一個asprintf()函數。
+ QString res =  asprintf("fileName:%s size:%d","./av.jpg",20);
+
+ QString arg(const QString &a, int fieldWidth = 0, QChar fillChar = QLatin1Char( ' ' )) const;
+ QString arg(int a, int fieldWidth = 0, int base = 10, QChar fillChar = QLatin1Char( ' ' )) const;
+ //用于填充字符串中的%1,%2…为给定格式的整形数字，其中第一个参数是要填充的数字，第二个参数为最小宽度，第三个参数为进制，第四个参数为当原始数字长度不足最小宽度时用于填充的字符
+ 
+ // 示例程序
+ QString str =  QString("%1 %2 %3").arg(1).arg(2);
+ str = str.arg("hello");
+ qDebug()<<str<<endl;     //"hello 2 1"
+ 
+ QString text = QString("%1:%2:%3").arg(1,2,10,QChar('0')).arg(35).arg(59);
+ qDebug()<<text<<endl;    //"01:35:59"

@@ -1,0 +1,5 @@
+語音 模仿/變造/偽造 (卡通:柯南) 實作
+
+資料來源:https://mp.weixin.qq.com/s/cNusZSpV7Ed2Gz9ew9rK5Q
+
+GITHUB: https://github.com/CorentinJ/Real-Time-Voice-Cloning.git
